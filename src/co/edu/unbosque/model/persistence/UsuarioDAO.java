@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import co.edu.unbosque.model.Conexion;
@@ -33,13 +34,14 @@ public class UsuarioDAO {
 		}
 		return verificar;
 	}
+	
 
 	public ArrayList<Usuario> consultarUsuarios() {
 		conex.conectarDB();
 		ArrayList<Usuario> listaUsuario = new ArrayList<Usuario>();
 		try {
 			PreparedStatement consulta = conex.getConnection().prepareStatement(
-					"SELECT nombres, apellidos, correo, cedula, direccion, edad, sexo FROM usuario WHERE idrol in (2,3)");
+					"SELECT nombres, apellidos, correo, cedula, direccion, edad, sexo FROM usuario WHERE idrol in (2,3) and estado = 'A'");
 			ResultSet res = consulta.executeQuery();
 			while (res.next()) {
 				Usuario usuario = new Usuario(res.getString("correo"), res.getString("cedula"),
@@ -61,8 +63,8 @@ public class UsuarioDAO {
 		conex.conectarDB();
 		ArrayList<Usuario> listaUsuario = new ArrayList<Usuario>();
 		try {
-			PreparedStatement consulta = conex.getConnection().prepareStatement(
-					"SELECT * FROM usuario WHERE " + matriz[posicion][0] + " = '" + matriz[posicion][1] + "'");
+			PreparedStatement consulta = conex.getConnection().prepareStatement("SELECT * FROM usuario WHERE "
+					+ matriz[posicion][0] + " = '" + matriz[posicion][1] + "' and idrol in (2,3) and estado = 'A'");
 			ResultSet res = consulta.executeQuery();
 			while (res.next()) {
 				Usuario usuario = new Usuario(res.getString("correo"), res.getString("cedula"),
@@ -84,9 +86,10 @@ public class UsuarioDAO {
 		conex.conectarDB();
 		ArrayList<Usuario> listaUsuario = new ArrayList<Usuario>();
 		try {
-			PreparedStatement consulta = conex.getConnection().prepareStatement(
-					"SELECT * FROM usuario WHERE " + matriz[posicion1][0] + " = '" + matriz[posicion1][1] + "' and "
-							+ matriz[posicion2][0] + " = '" + matriz[posicion2][1] + "'");
+			PreparedStatement consulta = conex.getConnection()
+					.prepareStatement("SELECT * FROM usuario WHERE " + matriz[posicion1][0] + " = '"
+							+ matriz[posicion1][1] + "' and " + matriz[posicion2][0] + " = '" + matriz[posicion2][1]
+							+ "' and idrol in (2,3) and estado = 'A'");
 			ResultSet res = consulta.executeQuery();
 			while (res.next()) {
 				Usuario usuario = new Usuario(res.getString("correo"), res.getString("cedula"),
@@ -111,7 +114,8 @@ public class UsuarioDAO {
 			PreparedStatement consulta = conex.getConnection()
 					.prepareStatement("SELECT * FROM usuario WHERE " + matriz[posicion1][0] + " = '"
 							+ matriz[posicion1][1] + "' and " + matriz[posicion2][0] + " = '" + matriz[posicion2][1]
-							+ "' and " + matriz[posicion3][0] + " = '" + matriz[posicion3][1] + "'");
+							+ "' and " + matriz[posicion3][0] + " = '" + matriz[posicion3][1]
+							+ "' and idrol in (2,3) and estado = 'A'");
 			ResultSet res = consulta.executeQuery();
 			while (res.next()) {
 				Usuario usuario = new Usuario(res.getString("correo"), res.getString("cedula"),
@@ -134,11 +138,10 @@ public class UsuarioDAO {
 		conex.conectarDB();
 		ArrayList<Usuario> listaUsuario = new ArrayList<Usuario>();
 		try {
-			PreparedStatement consulta = conex.getConnection()
-					.prepareStatement("SELECT * FROM usuario WHERE " + matriz[posicion1][0] + " = '"
-							+ matriz[posicion1][1] + "' and " + matriz[posicion2][0] + " = '" + matriz[posicion2][1]
-							+ "' and " + matriz[posicion3][0] + " = '" + matriz[posicion3][1] + "' and "
-							+ matriz[posicion4][0] + " = '" + matriz[posicion4][1] + "'");
+			PreparedStatement consulta = conex.getConnection().prepareStatement("SELECT * FROM usuario WHERE "
+					+ matriz[posicion1][0] + " = '" + matriz[posicion1][1] + "' and " + matriz[posicion2][0] + " = '"
+					+ matriz[posicion2][1] + "' and " + matriz[posicion3][0] + " = '" + matriz[posicion3][1] + "' and "
+					+ matriz[posicion4][0] + " = '" + matriz[posicion4][1] + "' and idrol in (2,3) and estado = 'A'");
 			ResultSet res = consulta.executeQuery();
 			while (res.next()) {
 				Usuario usuario = new Usuario(res.getString("correo"), res.getString("cedula"),
@@ -164,7 +167,7 @@ public class UsuarioDAO {
 					.prepareStatement("SELECT * FROM usuario WHERE " + matriz[1][0] + " = '" + matriz[1][1] + "' and "
 							+ matriz[2][0] + " = '" + matriz[2][1] + "' and " + matriz[3][0] + " = '" + matriz[3][1]
 							+ "' and " + matriz[4][0] + " = '" + matriz[4][1] + "' and " + matriz[5][0] + " = '"
-							+ matriz[5][1] + "'");
+							+ matriz[5][1] + "' and idrol in (2,3) and estado = 'A'");
 			ResultSet res = consulta.executeQuery();
 			while (res.next()) {
 				Usuario usuario = new Usuario(res.getString("correo"), res.getString("cedula"),
@@ -268,16 +271,63 @@ public class UsuarioDAO {
 		return verificar;
 	}
 
+	public boolean eliminarUsuario(String cedula) {
+		String cedulaU = "";
+		boolean verificar = false;
+		try {
+			conex.conectarDB();
+
+			PreparedStatement consulta = conex.getConnection()
+					.prepareStatement("SELECT * FROM usuario WHERE cedula = '" + cedula + "' and estado = 'A'");
+			ResultSet res = consulta.executeQuery();
+			while (res.next()) {
+				cedulaU = "" + res.getInt("cedula");
+			}
+			if (cedulaU.equals(cedula)) {
+				Statement smt = conex.getConnection().createStatement();
+				smt.executeUpdate("UPDATE usuario set estado = 'I' WHERE cedula = '" + cedula + "'");
+				verificar = true;
+				smt.close();
+				conex.cerrarDB();
+			}
+			conex.cerrarDB();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return verificar;
+	}
+
+	public boolean editarUsuario(String[][] matriz) {
+		boolean verificar = false;
+		System.out.println("UPDATE usuario SET " + matriz[1][0] + " = '" + matriz[1][1] + "' WHERE cedula = '"
+					+ matriz[1][2] + "'");
+		try {
+			conex.conectarDB();
+			Statement smt = conex.getConnection().createStatement();
+			smt.executeUpdate("UPDATE usuario SET " + matriz[1][0] + " = '" + matriz[1][1] + "' WHERE cedula = '"
+					+ matriz[1][2] + "'");
+			verificar = true;
+			smt.close();
+			conex.cerrarDB();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return verificar;
+	}
+
 	public String[][] mostarInfoMascota(String idUsuario) {
 		ArrayList<Mascota> listaMascotas = mascotaDAO.consultarMascotas(idUsuario);
 
-		String[][] infoMascotas = new String[listaMascotas.size()][7];
+		String[][] infoMascotas = new String[listaMascotas.size()][6];
 		for (int i = 0; i < listaMascotas.size(); i++) {
-			infoMascotas[i][0] = listaMascotas.get(i).getNombre();
-			infoMascotas[i][1] = String.valueOf(listaMascotas.get(i).getIdEspecie());
-			infoMascotas[i][2] = String.valueOf(listaMascotas.get(i).getIdRaza());
-			infoMascotas[i][3] = String.valueOf(listaMascotas.get(i).getIdColor());
-			infoMascotas[i][4] = String.valueOf(listaMascotas.get(i).getAñoNacimiento());
+			infoMascotas[i][0] = String.valueOf(listaMascotas.get(i).getIdMascota());
+			infoMascotas[i][1] = listaMascotas.get(i).getNombre();
+			infoMascotas[i][2] = String.valueOf(listaMascotas.get(i).getIdEspecie());
+			infoMascotas[i][3] = String.valueOf(listaMascotas.get(i).getIdRaza());
+			infoMascotas[i][4] = String.valueOf(listaMascotas.get(i).getIdColor());
+			infoMascotas[i][5] = String.valueOf(listaMascotas.get(i).getAñoNacimiento());
 		}
 		return infoMascotas;
 	}

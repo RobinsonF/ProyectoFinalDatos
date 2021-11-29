@@ -15,7 +15,6 @@ public class PanelTablas extends JPanel {
 	private JTable tableMascotas;
 	private JTable tableClientes;
 
-
 	public PanelTablas() {
 		setLayout(new GridLayout(1, 1));
 		setBackground(Color.white);
@@ -30,7 +29,7 @@ public class PanelTablas extends JPanel {
 	public void mostrarTablaMascotas(String[][] infoMascotas) {
 		setBorder(new TitledBorder("Información de mascotas"));
 		JButton btn1 = new JButton("Modificar");
-		String[] titulos = { "Nombre", "Especie", "Raza", "Color", "Año nacimiento" };
+		String[] titulos = { "ID", "Nombre", "Especie", "Raza", "Color", "Año nacimiento" };
 		tableMascotas = new JTable(infoMascotas, titulos);
 		JScrollPane sp = new JScrollPane(tableMascotas);
 		tableMascotas.setDefaultEditor(tableMascotas.getColumnClass(0), null);
@@ -52,10 +51,10 @@ public class PanelTablas extends JPanel {
 
 	public void mostrarTablaTodasMascotas(String[][] infoMascotas) {
 		setBorder(new TitledBorder("Información de mascotas"));
-		String[] titulos = { "Nombre", "Especie", "Raza", "Color", "Año nacimiento", "Dueño" };
+		String[] titulos = { "ID", "Nombre", "Especie", "Raza", "Color", "Año nacimiento", "Dueño" };
 		tableMascotas = new JTable(infoMascotas, titulos);
 		JScrollPane sp = new JScrollPane(tableMascotas);
-		tableMascotas.setEnabled(false);
+		tableMascotas.setDefaultEditor(tableMascotas.getColumnClass(0), null);
 		tableMascotas.setRowHeight(20);
 		tableMascotas.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		sp.setViewportView(tableMascotas);
@@ -77,7 +76,7 @@ public class PanelTablas extends JPanel {
 		String[] titulos = { "Nombres", "Apellidos", "Correo", "Cedula", "Dirección", "edad", "Sexo" };
 		tableMascotas = new JTable(infoClientes, titulos);
 		JScrollPane sp = new JScrollPane(tableMascotas);
-		tableMascotas.setEnabled(false);
+		tableMascotas.setDefaultEditor(tableMascotas.getColumnClass(0), null);
 		tableMascotas.setRowHeight(20);
 		tableMascotas.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 		sp.setViewportView(tableMascotas);
@@ -96,8 +95,9 @@ public class PanelTablas extends JPanel {
 
 	public int verificarDatosTabla() {
 		if (tableMascotas.getSelectedRows().length == 1) {
-			String[] cont = String.valueOf(tableMascotas.getValueAt(tableMascotas.getSelectedRow(), 2)).split("-");
-			if (cont.length == 6) {
+			String[] cont = String.valueOf(tableMascotas.getValueAt(tableMascotas.getSelectedRow(), 3)).split("-");
+			System.out.println(cont.length);
+			if (cont.length == 1) {
 				return 1;
 			} else {
 				return 0;
@@ -105,6 +105,62 @@ public class PanelTablas extends JPanel {
 		} else {
 			return -1;
 		}
+	}
+
+	public String[] obtenerDatosTabla() {
+		String[] salida = new String[9];
+		salida[0] = "0";
+		if (tableMascotas.getSelectedRows().length == 1) {
+			salida[1] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 3));
+			salida[2] = "Se ha borrado exitosamente el usuario";
+			salida[3] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 0));
+			salida[4] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 1));
+			salida[5] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 2));
+			salida[6] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 4));
+			salida[7] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 5));
+			salida[8] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 6));
+		} else {
+			salida[0] = "1";
+			salida[1] = "Seleccione una solo usuario";
+		}
+		return salida;
+	}
+
+	public String[] obtenerDatosTablaMascota() {
+		String[] salida = new String[8];
+		salida[0] = "0";
+		if (tableMascotas.getSelectedRows().length == 1) {
+			salida[1] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 0));
+			salida[2] = "Se ha borrado exitosamente la mascota";
+			salida[3] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 1));
+			salida[4] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 2));
+			salida[5] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 3));
+			salida[6] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 4));
+			salida[7] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 5));
+
+		} else {
+			salida[0] = "1";
+			salida[1] = "Seleccione una sola mascota";
+		}
+		return salida;
+	}
+
+	public String[] obtenerDatosTablaMascotaUsuario() {
+		String[] salida = new String[8];
+		salida[0] = "0";
+		if (tableMascotas.getSelectedRows().length == 1) {
+			salida[1] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 0));
+			salida[2] = "Se ha borrado exitosamente la mascota";
+			salida[3] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 1));
+			salida[4] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 2));
+			salida[5] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 3));
+			salida[6] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 4));
+			salida[7] = String.valueOf(this.tableMascotas.getValueAt(this.tableMascotas.getSelectedRow(), 5));
+		} else {
+			salida[0] = "1";
+			salida[1] = "Seleccione una sola mascota";
+		}
+		return salida;
 	}
 
 	public JTable getTableMascotas() {

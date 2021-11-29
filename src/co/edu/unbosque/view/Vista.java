@@ -16,6 +16,7 @@ public class Vista extends JFrame {
 	private PanelCrearUsuario panelCrearUsuario;
 	private PanelCliente panelCliente;
 	private PanelAdministrador panelAdministrador;
+	private PanelEmpleado panelEmpleado;
 	private JPanel panelPrincipal;
 
 	public Vista(Controller controller) {
@@ -37,6 +38,10 @@ public class Vista extends JFrame {
 		panelCrearUsuario.setVisible(false);
 		panelAdministrador = new PanelAdministrador();
 		panelAdministrador.setVisible(false);
+		panelEmpleado = new PanelEmpleado();
+		panelEmpleado .setVisible(false);
+		panelPrincipal.add(panelEmpleado);
+		panelEmpleado.setBounds(0, 0, 785, 462);
 		panelPrincipal.add(panelLogin);
 		panelLogin.setBounds(0, 0, 785, 462);
 		panelPrincipal.add(panelCrearUsuario);
@@ -68,14 +73,27 @@ public class Vista extends JFrame {
 		panelCliente.getPanelEditarMascota().getBtnConfirmar().addActionListener(controller);
 		panelCliente.getPanelEditarMascota().getBtnVolver().addActionListener(controller);
 		panelCliente.getBtnVolver().addActionListener(controller);
+		panelCliente.getPanelEditarMascota().getComboOpcion().addActionListener(controller);
+		panelCliente.getPanelClienteInformacion().getComboOpcion().addActionListener(controller);
 		panelAdministrador.getBtnVerMascota().addActionListener(controller);
 		panelAdministrador.getBtnVerUsuarios().addActionListener(controller);
 		panelAdministrador.getBtnVolver().addActionListener(controller);
 		panelAdministrador.getBtnEditar().addActionListener(controller);
+		panelAdministrador.getBtnEditar2().addActionListener(controller);
 		panelAdministrador.getBtnEliminar().addActionListener(controller);
+		panelAdministrador.getBtnEliminar2().addActionListener(controller);
 		panelAdministrador.getPanelFiltroUsuario().getBtnFiltrar().addActionListener(controller);
 		panelAdministrador.getPanelFiltroMascotaA().getBtnConfirmar().addActionListener(controller);
-
+		panelAdministrador.getPanelEditarUsuario().getBtnConfirmar().addActionListener(controller);
+		panelAdministrador.getPanelEditarUsuario().getBtnVolver().addActionListener(controller);
+		panelAdministrador.getPanelEditarMascota().getComboOpcion().addActionListener(controller);
+		panelAdministrador.getPanelEditarMascota().getBtnConfirmar().addActionListener(controller);
+		panelAdministrador.getBtnCrearEmpleado().addActionListener(controller);
+		panelAdministrador.getPanelCrearEmpleado().getBtnCrear().addActionListener(controller);
+		panelEmpleado.getBtnFactura().addActionListener(controller);
+		panelEmpleado.getBtnCerrar().addActionListener(controller);
+		panelEmpleado.getPanelEmpleadoServicio().getBtnConfirmar().addActionListener(controller);
+		panelEmpleado.getBtnVerFacturas().addActionListener(controller);
 	}
 
 	/**
@@ -113,6 +131,11 @@ public class Vista extends JFrame {
 			n = "Por favor digite un valor";
 		}
 		return n;
+	}
+
+	public int mostarMensajeConfirmar(String mensaje) {
+		int verificar = JOptionPane.showConfirmDialog(null, mensaje);
+		return verificar;
 	}
 
 	public JPanel getPanelPrincipal() {
@@ -157,6 +180,22 @@ public class Vista extends JFrame {
 
 	public void setPanelAdministrador(PanelAdministrador panelAdministrador) {
 		this.panelAdministrador = panelAdministrador;
+	}
+
+	public PanelCliente getPanelCliente() {
+		return panelCliente;
+	}
+
+	public void setPanelCliente(PanelCliente panelCliente) {
+		this.panelCliente = panelCliente;
+	}
+
+	public PanelEmpleado getPanelEmpleado() {
+		return panelEmpleado;
+	}
+
+	public void setPanelEmpleado(PanelEmpleado panelEmpleado) {
+		this.panelEmpleado = panelEmpleado;
 	}
 
 }

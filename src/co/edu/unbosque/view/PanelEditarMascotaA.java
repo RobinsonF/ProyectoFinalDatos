@@ -16,11 +16,11 @@ import co.edu.unbosque.model.persistence.Color;
 import co.edu.unbosque.model.persistence.Especie;
 import co.edu.unbosque.model.persistence.Raza;
 
-public class PanelEditarMascotaC extends JPanel {
+public class PanelEditarMascotaA extends JPanel {
 
-	private final String COMANDO_EDITARMASCOTA = "EDITARMASCOTACL";
-	private final String COMANDO_VOLVER = "VOLVER14";
-	private final String COMANDO_DATOEDITAR = "CAMBIARPANEL2";
+	private final String COMANDO_EDITARMASCOTA = "EDITARMASCOTAA";
+	private final String COMANDO_VOLVER = "VOLVER13";
+	private final String COMANDO_DATOEDITAR = "CAMBIARPANEL";
 	private JLabel labelId;
 	private JLabel labelNombre;
 	private JLabel labelEspecie;
@@ -53,7 +53,7 @@ public class PanelEditarMascotaC extends JPanel {
 	private JPanel panelColor;
 	private JPanel panelNombre;
 
-	public PanelEditarMascotaC() {
+	public PanelEditarMascotaA() {
 		setBorder(new TitledBorder("Editar Mascota"));
 		setLayout(new BorderLayout());
 		labelId = new JLabel("Id: ");

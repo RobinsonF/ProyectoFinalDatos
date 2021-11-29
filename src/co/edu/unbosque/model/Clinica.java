@@ -1,13 +1,20 @@
 package co.edu.unbosque.model;
 
+import co.edu.unbosque.model.persistence.FacturaDAO;
+import co.edu.unbosque.model.persistence.ServicioDAO;
 import co.edu.unbosque.model.persistence.UsuarioDAO;
 
 public class Clinica {
 
 	private UsuarioDAO usuarioDAO;
+	private ServicioDAO servicioDAO;
+	private FacturaDAO facturaDAO;
+	
 
 	public Clinica() {
 		usuarioDAO = new UsuarioDAO();
+		servicioDAO = new ServicioDAO();
+		facturaDAO = new FacturaDAO();
 	}
 
 	public boolean soloNumeros(String numero) {
@@ -55,12 +62,29 @@ public class Clinica {
 		}
 	}
 
+
 	public UsuarioDAO getUsuarioDAO() {
 		return usuarioDAO;
 	}
 
 	public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
 		this.usuarioDAO = usuarioDAO;
+	}
+
+	public ServicioDAO getServicioDAO() {
+		return servicioDAO;
+	}
+
+	public void setServicioDAO(ServicioDAO servicioDAO) {
+		this.servicioDAO = servicioDAO;
+	}
+
+	public FacturaDAO getFacturaDAO() {
+		return facturaDAO;
+	}
+
+	public void setFacturaDAO(FacturaDAO facturaDAO) {
+		this.facturaDAO = facturaDAO;
 	}
 
 }

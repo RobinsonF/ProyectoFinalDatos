@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import co.edu.unbosque.model.persistence.Color;
@@ -19,6 +21,7 @@ import co.edu.unbosque.model.persistence.Usuario;
 public class PanelClienteInformacion extends JPanel {
 
 	private final String COMANDO_EDITAR = "EDITARC";
+	private final String COMANDO_DATOEDITAR = "CAMBIARPANEL3";
 	private JLabel labelNombres;
 	private JLabel labelApellidos;
 	private JLabel labelCedula;
@@ -36,7 +39,14 @@ public class PanelClienteInformacion extends JPanel {
 	private JLabel labelSexo2;
 	private JLabel labelEdad2;
 	private JButton btnEditarInfo;
+	private JLabel labelCombo;
+	private JComboBox<String> comboOpcion;
 	private JPanel panel;
+	private JPanel panelNombresApellidos;
+	private JPanel panelTelefono;
+	private JSplitPane splitPane;
+	private JLabel labelDato;
+	private JTextField txtDato;
 
 	public PanelClienteInformacion() {
 		setBorder(new TitledBorder("Aqui puedes ver toda tu informacion"));
@@ -59,9 +69,15 @@ public class PanelClienteInformacion extends JPanel {
 		labelEdad2 = new JLabel();
 		btnEditarInfo = new JButton("Modificar datos");
 		btnEditarInfo.setActionCommand(COMANDO_EDITAR);
-		btnEditarInfo.setSize(10, 10);
+		labelCombo = new JLabel("Selecciona el dato a editar: ");
+		comboOpcion = new JComboBox<String>();
+		comboOpcion.addItem("Seleccione");
+		comboOpcion.addItem("Nombres");
+		comboOpcion.addItem("Apellidos");
+		comboOpcion.addItem("Telefeno");
+		comboOpcion.setActionCommand(COMANDO_DATOEDITAR);
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(8, 8));
+		panel.setLayout(new GridLayout(9, 9));
 		panel.add(labelNombres);
 		panel.add(labelNombres2);
 		panel.add(labelApellidos);
@@ -78,7 +94,19 @@ public class PanelClienteInformacion extends JPanel {
 		panel.add(labelSexo2);
 		panel.add(labelEdad);
 		panel.add(labelEdad2);
-		add(panel, BorderLayout.CENTER);
+		panel.add(labelCombo);
+		panel.add(comboOpcion);
+		panelNombresApellidos = new JPanel();
+		panelNombresApellidos.setLayout(new GridLayout(1, 2));
+		labelDato = new JLabel("Escriba el nuevo dato");
+		txtDato = new JTextField();
+		panelNombresApellidos.add(labelDato);
+		panelNombresApellidos.add(txtDato);
+		panelTelefono = new JPanel();
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPane.setEnabled(false);
+		splitPane.setTopComponent(panel);
+		add(splitPane, BorderLayout.CENTER);
 		add(btnEditarInfo, BorderLayout.PAGE_END);
 
 	}
@@ -97,6 +125,15 @@ public class PanelClienteInformacion extends JPanel {
 		comboTelefono.removeAllItems();
 		for (int i = 0; i < telefonos.size(); i++) {
 			comboTelefono.addItem(telefonos.get(i).getNumeroTelefono());
+		}
+
+	}
+
+	public void cambiarPanel() {
+		if ("Nombres".equals(comboOpcion.getSelectedItem().toString())
+				|| "Apellidos".equals(comboOpcion.getSelectedItem().toString())) {
+			splitPane.setBottomComponent(panelNombresApellidos);
+			splitPane.setDividerLocation(350);
 		}
 
 	}
@@ -248,4 +285,57 @@ public class PanelClienteInformacion extends JPanel {
 	public String getCOMANDO_EDITAR() {
 		return COMANDO_EDITAR;
 	}
+
+	public JLabel getLabelCombo() {
+		return labelCombo;
+	}
+
+	public void setLabelCombo(JLabel labelCombo) {
+		this.labelCombo = labelCombo;
+	}
+
+	public JComboBox<String> getComboOpcion() {
+		return comboOpcion;
+	}
+
+	public void setComboOpcion(JComboBox<String> comboOpcion) {
+		this.comboOpcion = comboOpcion;
+	}
+
+	public JPanel getPanelNombresApellidos() {
+		return panelNombresApellidos;
+	}
+
+	public void setPanelNombresApellidos(JPanel panelNombresApellidos) {
+		this.panelNombresApellidos = panelNombresApellidos;
+	}
+
+	public JSplitPane getSplitPane() {
+		return splitPane;
+	}
+
+	public void setSplitPane(JSplitPane splitPane) {
+		this.splitPane = splitPane;
+	}
+
+	public JLabel getLabelDato() {
+		return labelDato;
+	}
+
+	public void setLabelDato(JLabel labelDato) {
+		this.labelDato = labelDato;
+	}
+
+	public JTextField getTxtDato() {
+		return txtDato;
+	}
+
+	public void setTxtDato(JTextField txtDato) {
+		this.txtDato = txtDato;
+	}
+
+	public String getCOMANDO_DATOEDITAR() {
+		return COMANDO_DATOEDITAR;
+	}
+
 }

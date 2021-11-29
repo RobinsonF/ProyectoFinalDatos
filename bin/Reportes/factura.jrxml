@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="48ce127d-cf6d-4753-9abc-e31a5e267c26">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Proyecto"/>
+	<queryString language="SQL">
+		<![CDATA[select u.cedula as cedula, f3.nombre as formaPago, s.nombre as serivio , f.fechageneracion as fecha, f2.cantitad as cantidad, f2.valorunitario, f2.iva_19 , f2.subtotal, f2.total from usuario u, factura f, facturadetalle f2, formapago f3, servicio s
+where u.correo = f.idusuario and f3.idpago = f.idformapago and f2.idfactura = f.idfactura and f2.idservicio = s.idservicio]]>
+	</queryString>
+	<field name="cedula" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cedula"/>
+		<property name="com.jaspersoft.studio.field.label" value="cedula"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+	</field>
+	<field name="formapago" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="formapago"/>
+		<property name="com.jaspersoft.studio.field.label" value="formapago"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="formapago"/>
+	</field>
+	<field name="serivio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="serivio"/>
+		<property name="com.jaspersoft.studio.field.label" value="serivio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="servicio"/>
+	</field>
+	<field name="fecha" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="cantidad" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="cantidad"/>
+		<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturadetalle"/>
+	</field>
+	<field name="valorunitario" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="valorunitario"/>
+		<property name="com.jaspersoft.studio.field.label" value="valorunitario"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturadetalle"/>
+	</field>
+	<field name="iva_19" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="iva_19"/>
+		<property name="com.jaspersoft.studio.field.label" value="iva_19"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturadetalle"/>
+	</field>
+	<field name="subtotal" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="subtotal"/>
+		<property name="com.jaspersoft.studio.field.label" value="subtotal"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturadetalle"/>
+	</field>
+	<field name="total" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="facturadetalle"/>
+	</field>
+	<group name="cedula">
+		<groupExpression><![CDATA[$F{cedula}]]></groupExpression>
+	</group>
+	<group name="formapago">
+		<groupExpression><![CDATA[$F{formapago}]]></groupExpression>
+	</group>
+	<group name="serivio">
+		<groupExpression><![CDATA[$F{serivio}]]></groupExpression>
+	</group>
+	<group name="fecha">
+		<groupExpression><![CDATA[$F{fecha}]]></groupExpression>
+	</group>
+	<group name="cantidad">
+		<groupExpression><![CDATA[$F{cantidad}]]></groupExpression>
+	</group>
+	<group name="valorunitario">
+		<groupExpression><![CDATA[$F{valorunitario}]]></groupExpression>
+	</group>
+	<group name="iva_19">
+		<groupExpression><![CDATA[$F{iva_19}]]></groupExpression>
+	</group>
+	<group name="subtotal">
+		<groupExpression><![CDATA[$F{subtotal}]]></groupExpression>
+	</group>
+	<group name="total">
+		<groupExpression><![CDATA[$F{total}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="150" y="20" width="240" height="40" uuid="55927886-d953-43e3-a3ff-0e626d6c2950"/>
+				<textElement textAlignment="Center">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Factura de clientes]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="72" splitType="Stretch">
+			<staticText>
+				<reportElement x="-10" y="0" width="50" height="30" uuid="30557494-4e5e-4eaa-9484-39caa57a8833"/>
+				<text><![CDATA[Cedula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="0" width="50" height="30" uuid="78deb252-f08e-4fa8-bd7e-67a1b0d07000"/>
+				<text><![CDATA[Forma de pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="50" height="30" uuid="ec41f267-88b3-4fcc-8825-01678225eaea"/>
+				<text><![CDATA[Servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="50" height="30" uuid="c764fde3-531f-4a0d-8146-8bbd61001b9f"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="0" width="50" height="30" uuid="de210e8e-b777-48af-b5f8-d3a1b6cf4d67"/>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="0" width="50" height="30" uuid="aabb3b58-310c-4eb3-a45b-75f166383eab"/>
+				<text><![CDATA[Valor Unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="0" width="50" height="20" uuid="b3ac10a6-c69f-40dd-90a2-9ab4cc499829"/>
+				<text><![CDATA[Iva19%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="0" width="50" height="20" uuid="396ec17f-420e-43f3-bc2e-d79142e05282"/>
+				<text><![CDATA[Subtotal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="0" width="50" height="31" uuid="33d2b689-ac74-4409-96e5-ebf4928e73d9"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="63" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="-20" y="10" width="60" height="30" uuid="44cb5a0d-810d-4c35-bd56-53fd1a84d166"/>
+				<textFieldExpression><![CDATA[$F{cedula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="10" width="50" height="30" uuid="7a8cab55-5e31-45ae-bbbf-4b5545086ae1"/>
+				<textFieldExpression><![CDATA[$F{formapago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="10" width="50" height="30" uuid="c44a599f-aa39-40aa-8e8b-dd2ba25cee05"/>
+				<textFieldExpression><![CDATA[$F{serivio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="10" width="50" height="30" uuid="eed693ff-1642-4cf9-b7b3-df6aa9ef6828"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="10" width="50" height="30" uuid="7cc9cc04-751c-412b-a5a2-edebf65a7f8b"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="10" width="50" height="30" uuid="34fc9e0d-6f03-488c-a413-01d987871ca9"/>
+				<textFieldExpression><![CDATA[$F{valorunitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="10" width="50" height="30" uuid="a530fb9c-3a62-4642-b6de-f491bb6be827"/>
+				<textFieldExpression><![CDATA[$F{iva_19}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="10" width="50" height="30" uuid="50a49564-43d1-4248-b1bb-9cd283605747"/>
+				<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="10" width="50" height="30" uuid="02a27c04-62f6-458c-8bb3-c726602ac02d"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="46" splitType="Stretch"/>
+	</summary>
+</jasperReport>

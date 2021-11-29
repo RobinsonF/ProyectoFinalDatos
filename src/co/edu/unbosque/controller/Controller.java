@@ -3,14 +3,11 @@ package co.edu.unbosque.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import javax.swing.JOptionPane;
 
 import co.edu.unbosque.model.Clinica;
 import co.edu.unbosque.model.ExceptionCedula;
@@ -18,11 +15,20 @@ import co.edu.unbosque.model.ExceptionNumero;
 import co.edu.unbosque.model.ExceptionTelefono;
 import co.edu.unbosque.model.persistence.Color;
 import co.edu.unbosque.model.persistence.Especie;
+import co.edu.unbosque.model.persistence.FormaPago;
 import co.edu.unbosque.model.persistence.Mascota;
 import co.edu.unbosque.model.persistence.Raza;
+import co.edu.unbosque.model.persistence.Servicio;
 import co.edu.unbosque.model.persistence.Telefono;
 import co.edu.unbosque.model.persistence.Usuario;
 import co.edu.unbosque.view.Vista;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class Controller implements ActionListener {
 
@@ -44,6 +50,7 @@ public class Controller implements ActionListener {
 			vista.getPanelCrearUsuario().setVisible(true);
 			vista.getPanelUsuario().setVisible(false);
 			vista.getPanelAdministrador().setVisible(false);
+			vista.getPanelEmpleado().setVisible(false);
 
 		}
 		if (comando.equals(vista.getPanelUsuario().getCOMANDO_VOLVER())) {
@@ -117,12 +124,21 @@ public class Controller implements ActionListener {
 		}
 
 		if (comando.equals(vista.getPanelUsuario().getCOMANDO_EDITAR())) {
-			ArrayList<Mascota> listaMascota = clinica.getUsuarioDAO().getMascotaDAO().consultarMascotas(this.usuario);
-			ArrayList<Color> colores = clinica.getUsuarioDAO().getMascotaDAO().getColorDAO().consultarColores();
-			ArrayList<Especie> especies = clinica.getUsuarioDAO().getMascotaDAO().getEspecieDAO().consultarEspecies();
-			ArrayList<Raza> razas = clinica.getUsuarioDAO().getMascotaDAO().getRazaDAO().consultarRazas();
-			vista.getPanelUsuario().getPanelEditarMascota().cargarComboBox(listaMascota, colores, especies, razas);
-			vista.getPanelUsuario().getSplitPane().setRightComponent(vista.getPanelUsuario().getPanelEditarMascota());
+			if (vista.getPanelUsuario().getPanelTablaMascota().verificarDatosTabla() == 1) {
+				ArrayList<Color> colores = clinica.getUsuarioDAO().getMascotaDAO().getColorDAO().consultarColores();
+				ArrayList<Especie> especies = clinica.getUsuarioDAO().getMascotaDAO().getEspecieDAO()
+						.consultarEspecies();
+				ArrayList<Raza> razas = clinica.getUsuarioDAO().getMascotaDAO().getRazaDAO().consultarRazas();
+				vista.getPanelUsuario().getPanelEditarMascota().cargarComboBox(colores, especies, razas);
+				vista.getPanelUsuario().getSplitPane()
+						.setRightComponent(vista.getPanelUsuario().getPanelEditarMascota());
+				String[] entradas = vista.getPanelUsuario().getPanelTablaMascota().obtenerDatosTablaMascota();
+				vista.getPanelUsuario().getPanelEditarMascota().recibirDatosMascota(entradas[1], entradas[3],
+						entradas[4], entradas[5], entradas[6], entradas[7]);
+			} else {
+				vista.mostrarMensajeAdvertencia("Seleccione al menos un dato");
+			}
+
 		}
 
 		if (comando.equals(vista.getPanelUsuario().getPanelFiltro().getCOMANDO_FILTRO())) {
@@ -155,6 +171,81 @@ public class Controller implements ActionListener {
 
 		if (comando.equals(vista.getPanelAdministrador().getPanelFiltroMascotaA().getCOMANDO_FILTRO())) {
 			filtrarMascotaAdmin();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_BORRAR())) {
+			borrarUsuario();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_BORRARM())) {
+			borrarMascota();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_EDITAR())) {
+			editarUsuarioAdmin();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_EDITARM())) {
+			editarMascotaAdmin();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getPanelEditarUsuario().getCOMANDO_EDITARMASCOTA())) {
+			editarUsuarioCon();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getPanelEditarMascota().getCOMANDO_DATOEDITAR())) {
+			vista.getPanelAdministrador().getPanelEditarMascota().cambiarPanel();
+		}
+
+		if (comando.equals(vista.getPanelUsuario().getPanelClienteInformacion().getCOMANDO_DATOEDITAR())) {
+			vista.getPanelUsuario().getPanelClienteInformacion().cambiarPanel();
+		}
+
+		if (comando.equals(vista.getPanelUsuario().getPanelEditarMascota().getCOMANDO_DATOEDITAR())) {
+			vista.getPanelUsuario().getPanelEditarMascota().cambiarPanel();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getPanelEditarMascota().getCOMANDO_EDITARMASCOTA())) {
+			editarMascotaCon();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_CREAREMPLEADO())) {
+			vista.getPanelAdministrador().getSplitPane()
+					.setRightComponent(vista.getPanelAdministrador().getPanelCrearEmpleado());
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getPanelCrearEmpleado().getCOMANDO_CREAR())) {
+			crearEmpleado();
+		}
+
+		if (comando.equals(vista.getPanelEmpleado().getCOMANDO_REGISTRARFACTURA())) {
+			ArrayList<Servicio> servicios = clinica.getServicioDAO().consultarServicios();
+			ArrayList<FormaPago> formaPagos = clinica.getFacturaDAO().getFormaPagoDAO().consultarFomaPagos();
+			vista.getPanelEmpleado().getPanelEmpleadoServicio().cargarComboBox(servicios, formaPagos);
+			vista.getPanelEmpleado().getSplitPane()
+					.setRightComponent(vista.getPanelEmpleado().getPanelEmpleadoServicio());
+		}
+
+		if (comando.equals(vista.getPanelEmpleado().getCOMANDO_CERRARSESION())) {
+			volverPanelLogin();
+		}
+
+		if (comando.equals(vista.getPanelEmpleado().getPanelEmpleadoServicio().getCOMANDO_REGISTRARFACTURA())) {
+			realizarFactura();
+		}
+
+		if (comando.equals(vista.getPanelEmpleado().getCOMANDO_VERFACTURA())) {
+			String path = "C:\\Users\\ROBINSON\\eclipse-workspace\\ProyectoFinal\\src\\Reportes\\factura.jrxml";
+			try {
+				JasperReport reporte = JasperCompileManager.compileReport(path);
+				JasperPrint jPrint = JasperFillManager.fillReport(reporte, null, clinica.getUsuarioDAO().getConex().getConnection());
+				JasperViewer viewer = new JasperViewer(jPrint);
+//				viewer.setDefaultCloseOperation(0);
+				viewer.setVisible(true);
+			} catch (JRException e1) {
+				e1.printStackTrace();
+			}
+
 		}
 
 	}
@@ -243,6 +334,7 @@ public class Controller implements ActionListener {
 					vista.getPanelUsuario().setVisible(false);
 					vista.getPanelLogin().setVisible(false);
 					vista.getPanelCrearUsuario().setVisible(false);
+					vista.getPanelEmpleado().setVisible(false);
 				}
 				if (Integer.parseInt(resultado[1]) == 2) {
 					vista.getPanelUsuario().getSplitPane()
@@ -251,6 +343,15 @@ public class Controller implements ActionListener {
 					vista.getPanelUsuario().setVisible(true);
 					vista.getPanelLogin().setVisible(false);
 					vista.getPanelCrearUsuario().setVisible(false);
+					vista.getPanelEmpleado().setVisible(false);
+				}
+				if (Integer.parseInt(resultado[1]) == 3) {
+					;
+					vista.getPanelAdministrador().setVisible(false);
+					vista.getPanelUsuario().setVisible(false);
+					vista.getPanelLogin().setVisible(false);
+					vista.getPanelCrearUsuario().setVisible(false);
+					vista.getPanelEmpleado().setVisible(true);
 				}
 
 			} else {
@@ -410,151 +511,32 @@ public class Controller implements ActionListener {
 //		}
 	}
 
-	public void editarInformacionMascotaCliente() {
-		String[][] entradas = vista.getPanelUsuario().getPanelEditarMascota().verificarCampos();
-		if (entradas[0][0].equals("0")) {
-			int contador = 0;
-
-			for (int i = 1; i < entradas.length - 1; i++) {
-				if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
-					contador++;
-				}
-			}
-
-			if (contador == 1) {
-				int k = 0;
-
-				for (int i = 1; i < entradas.length - 1; i++) {
-					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
-						k = i;
-						break;
-					}
-				}
-
-				if (k == 1 || k == 5) {
-
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota2(this.usuario, entradas, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-
-				} else {
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota(this.usuario, entradas, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-				}
-
-			}
-			if (contador == 2) {
-				int j = 0;
-				int k = 0;
-				for (int i = 1; i < entradas.length; i++) {
-					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
-						j = i;
-						break;
-					}
-				}
-				for (int i = j + 1; i < entradas.length; i++) {
-					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
-						k = i;
-						break;
-					}
-				}
-
-				if (j == 1 && k == 5) {
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota2(usuario, entradas, j, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-				} else if ((j == 2 || j == 3 || j == 4) && (k == 2 || k == 3 || k == 4)) {
-
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota(this.usuario, entradas, j, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-				} else {
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota3(this.usuario, entradas, j, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-				}
-
-			}
-
-			if (contador == 3) {
-				int j = 0;
-				int k = 0;
-				int l = 0;
-				for (int i = 1; i < entradas.length; i++) {
-					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
-						j = i;
-						break;
-					}
-				}
-				for (int i = j + 1; i < entradas.length; i++) {
-					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
-						k = i;
-						break;
-					}
-				}
-
-				for (int i = k + 1; i < entradas.length; i++) {
-					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
-						j = i;
-						break;
-					}
-				}
-				System.out.println("j: " + j);
-				System.out.println("k: " + k);
-				System.out.println("l: " + l);
-
-				if (j == 1 && l == 5) {
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota2(usuario, entradas, j, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-				} else if ((j == 2 || j == 3 || j == 4) && (k == 2 || k == 3 || k == 4)
-						&& (l == 2 || l == 3 || l == 4)) {
-
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota(usuario, entradas, j, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-				} else {
-					if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota3(usuario, entradas, j, k)) {
-						vista.mostrarMensajeInformacion("Se ha editado la informacion de tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion("No se ha podido actualizar la informacion de tu mascota");
-					}
-				}
-
-			}
-
-		} else {
-			vista.mostrarMensajeAdvertencia(entradas[0][1]);
-		}
-	}
-
 	public void borrarMascotaCliente() {
-		String id = vista.pedirDato("Ingrese el id de la mascota que desea eliminar");
-		if (clinica.getUsuarioDAO().getMascotaDAO().eliminarMascota(this.usuario, id)) {
-			String[][] info = clinica.getUsuarioDAO().mostarInfoMascota(usuario);
-			vista.getPanelUsuario().getPanelTablaMascota().limpiarPanel();
-			vista.getPanelUsuario().getPanelTablaMascota().mostrarTablaMascotas(info);
-			vista.getPanelUsuario().getPanelFiltroMascota().add(vista.getPanelUsuario().getPanelInformacionMascota());
-			vista.getPanelUsuario().getSplitPane().setRightComponent(vista.getPanelUsuario().getPanelFiltroMascota());
-			vista.getPanelUsuario().getPanelFiltro().limpiarCampos();
-			vista.mostrarMensajeInformacion("Se ha eliminado la mascota");
+		if (vista.getPanelUsuario().getPanelTablaMascota().verificarDatosTabla() == 1) {
+			String[] entradas = vista.getPanelUsuario().getPanelTablaMascota().obtenerDatosTablaMascotaUsuario();
+			int confirmar = vista.mostarMensajeConfirmar("Seguro desea eliminar a esta mascota");
+			if (confirmar == 0) {
+				if (clinica.getUsuarioDAO().getMascotaDAO().eliminarMascota(this.usuario, entradas[1])) {
+					String[][] info = clinica.getUsuarioDAO().mostarInfoMascota(usuario);
+					vista.getPanelUsuario().getPanelTablaMascota().limpiarPanel();
+					vista.getPanelUsuario().getPanelTablaMascota().mostrarTablaMascotas(info);
+					vista.getPanelUsuario().getPanelFiltroMascota()
+							.add(vista.getPanelUsuario().getPanelInformacionMascota());
+					vista.getPanelUsuario().getSplitPane()
+							.setRightComponent(vista.getPanelUsuario().getPanelFiltroMascota());
+					vista.getPanelUsuario().getPanelFiltro().limpiarCampos();
+					vista.mostrarMensajeInformacion(entradas[2]);
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido eliminar al usuario seleccionado");
+				}
+			} else if (confirmar == 1) {
+				vista.mostrarMensajeInformacion("Gracias por confirmar");
+			} else {
+				vista.mostrarMensajeInformacion("Gracias");
+			}
+
 		} else {
-			vista.mostrarMensajeInformacion("No se ha encontrado la mascota que intenta eliminar");
+			vista.mostrarMensajeAdvertencia("Seleccione al menos un dato");
 		}
 	}
 
@@ -563,6 +545,7 @@ public class Controller implements ActionListener {
 		vista.getPanelCrearUsuario().setVisible(false);
 		vista.getPanelUsuario().setVisible(false);
 		vista.getPanelAdministrador().setVisible(false);
+		vista.getPanelEmpleado().setVisible(false);
 	}
 
 	public void filtrarInfoUsuario() {
@@ -962,4 +945,205 @@ public class Controller implements ActionListener {
 			vista.mostrarMensajeAdvertencia(entradas[0][1]);
 		}
 	}
+
+	public void borrarUsuario() {
+		if (vista.getPanelAdministrador().getPanelTablaUsuario().verificarDatosTabla() == 1) {
+			String[] entradas = vista.getPanelAdministrador().getPanelTablaUsuario().obtenerDatosTabla();
+			int confirmar = vista.mostarMensajeConfirmar("Seguro desea eliminar a este usuario");
+			if (confirmar == 0) {
+				if (clinica.getUsuarioDAO().eliminarUsuario(entradas[1])) {
+					ArrayList<Usuario> listaUsuario = clinica.getUsuarioDAO().consultarUsuarios();
+					String[][] infoUsuario = clinica.getUsuarioDAO().mostarInfoUsuarios(listaUsuario);
+					vista.getPanelAdministrador().getPanelTablaUsuario().limpiarPanel();
+					vista.getPanelAdministrador().getPanelTablaUsuario().mostrarTablaClientes(infoUsuario);
+					vista.getPanelAdministrador().getPanelInfoUsuario()
+							.add(vista.getPanelAdministrador().getPanelTablaUsuario(), BorderLayout.CENTER);
+					vista.getPanelAdministrador().getPanelInfoUsuario()
+							.add(vista.getPanelAdministrador().getPanelBotones(), BorderLayout.PAGE_END);
+					vista.getPanelAdministrador().getPanelFiltroU()
+							.add(vista.getPanelAdministrador().getPanelInfoUsuario());
+					vista.getPanelAdministrador().getSplitPane()
+							.setRightComponent(vista.getPanelAdministrador().getPanelFiltroU());
+					vista.mostrarMensajeInformacion(entradas[2]);
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido eliminar al usuario seleccionado");
+				}
+			} else if (confirmar == 1) {
+				vista.mostrarMensajeInformacion("Gracias por confirmar");
+			} else {
+				vista.mostrarMensajeInformacion("Gracias");
+			}
+
+		} else {
+			vista.mostrarMensajeAdvertencia("Seleccione al menos un dato");
+		}
+	}
+
+	public void borrarMascota() {
+		if (vista.getPanelAdministrador().getPanelTablaMascota().verificarDatosTabla() == 1) {
+			String[] entradas = vista.getPanelAdministrador().getPanelTablaMascota().obtenerDatosTablaMascota();
+			int confirmar = vista.mostarMensajeConfirmar("Seguro desea eliminar a esta mascota");
+			if (confirmar == 0) {
+				if (clinica.getUsuarioDAO().getMascotaDAO().eliminarMascota(entradas[1])) {
+					ArrayList<Mascota> listaMascota = clinica.getUsuarioDAO().getMascotaDAO().consultarMascotas();
+					String[][] info = clinica.getUsuarioDAO().getMascotaDAO().mostarInfoMascota(listaMascota);
+					vista.getPanelAdministrador().getPanelTablaMascota().limpiarPanel();
+					vista.getPanelAdministrador().getPanelTablaMascota().mostrarTablaTodasMascotas(info);
+					vista.getPanelAdministrador().getPanelInformacionMascota()
+							.add(vista.getPanelAdministrador().getPanelTablaMascota(), BorderLayout.CENTER);
+					vista.getPanelAdministrador().getPanelInformacionMascota()
+							.add(vista.getPanelAdministrador().getPanelBotones2(), BorderLayout.PAGE_END);
+					vista.getPanelAdministrador().getPanelTodoM()
+							.add(vista.getPanelAdministrador().getPanelInformacionMascota());
+					vista.getPanelAdministrador().getSplitPane()
+							.setRightComponent(vista.getPanelAdministrador().getPanelTodoM());
+					vista.mostrarMensajeInformacion(entradas[2]);
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido eliminar la mascota seleccionado");
+				}
+			} else if (confirmar == 1) {
+				vista.mostrarMensajeInformacion("Gracias por confirmar");
+			} else {
+				vista.mostrarMensajeInformacion("Gracias");
+			}
+		} else {
+			vista.mostrarMensajeAdvertencia("Seleccione al menos un dato");
+		}
+	}
+
+	public void editarUsuarioAdmin() {
+		if (vista.getPanelAdministrador().getPanelTablaUsuario().verificarDatosTabla() == 1) {
+			vista.getPanelAdministrador().getSplitPane()
+					.setRightComponent(vista.getPanelAdministrador().getPanelEditarUsuario());
+			String[] entradas = vista.getPanelAdministrador().getPanelTablaUsuario().obtenerDatosTabla();
+			vista.getPanelAdministrador().getPanelEditarUsuario().recibirDatosUsuario(entradas[3], entradas[4],
+					entradas[5], entradas[1], entradas[6], entradas[7], entradas[8]);
+		} else {
+			vista.mostrarMensajeAdvertencia("Seleccione al menos un dato");
+		}
+	}
+
+	public void editarMascotaAdmin() {
+		if (vista.getPanelAdministrador().getPanelTablaMascota().verificarDatosTabla() == 1) {
+			vista.getPanelAdministrador().getSplitPane()
+					.setRightComponent(vista.getPanelAdministrador().getPanelEditarMascota());
+			String[] entradas = vista.getPanelAdministrador().getPanelTablaMascota().obtenerDatosTablaMascota();
+			vista.getPanelAdministrador().getPanelEditarMascota().recibirDatosMascota(entradas[1], entradas[3],
+					entradas[4], entradas[5], entradas[6], entradas[7]);
+			ArrayList<Color> colores = clinica.getUsuarioDAO().getMascotaDAO().getColorDAO().consultarColores();
+			ArrayList<Especie> especies = clinica.getUsuarioDAO().getMascotaDAO().getEspecieDAO().consultarEspecies();
+			ArrayList<Raza> razas = clinica.getUsuarioDAO().getMascotaDAO().getRazaDAO().consultarRazas();
+			vista.getPanelAdministrador().getPanelEditarMascota().cargarComboBox(colores, especies, razas);
+		} else {
+			vista.mostrarMensajeAdvertencia("Seleccione al menos un dato");
+		}
+	}
+
+	public void editarUsuarioCon() {
+		String[][] entradas = vista.getPanelAdministrador().getPanelEditarUsuario().verificarCampos();
+		if (entradas[0][0].equals("0")) {
+			if (clinica.getUsuarioDAO().editarUsuario(entradas)) {
+				vista.getPanelAdministrador().getPanelEditarUsuario().limpiarCampos();
+				vista.mostrarMensajeInformacion("El usuario se editado correctamente");
+			} else {
+				vista.mostrarMensajeInformacion("No se ha podido editar la información solicitada");
+			}
+		} else {
+			vista.mostrarMensajeAdvertencia(entradas[0][1]);
+		}
+	}
+
+	public void editarMascotaCon() {
+		String[][] entradas = vista.getPanelAdministrador().getPanelEditarMascota().verificarCampos();
+		if (entradas[0][0].equals("0")) {
+			if ("nombre".equals(entradas[1][0])) {
+				if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota2(entradas)) {
+					vista.mostrarMensajeInformacion("Se ha editado correctamente la información");
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido actualizar la información");
+				}
+			} else {
+				if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota(entradas)) {
+					vista.mostrarMensajeInformacion("Se ha editado correctamente la información");
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido actualizar la información");
+				}
+			}
+		} else {
+			vista.mostrarMensajeAdvertencia(entradas[0][1]);
+		}
+	}
+
+	public void editarInformacionMascotaCliente() {
+		String[][] entradas = vista.getPanelUsuario().getPanelEditarMascota().verificarCampos();
+		if (entradas[0][0].equals("0")) {
+			if ("nombre".equals(entradas[1][0])) {
+				if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota2(this.usuario, entradas)) {
+					vista.mostrarMensajeInformacion("Se ha editado correctamente la información");
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido actualizar la información");
+				}
+			} else {
+				if (clinica.getUsuarioDAO().getMascotaDAO().editarMascota(this.usuario, entradas)) {
+					vista.mostrarMensajeInformacion("Se ha editado correctamente la información");
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido actualizar la información");
+				}
+			}
+		} else {
+			vista.mostrarMensajeAdvertencia(entradas[0][1]);
+		}
+	}
+
+	public void crearEmpleado() {
+		String[] entradas = vista.getPanelAdministrador().getPanelCrearEmpleado().verificarEntradas();
+		if (entradas[0].equals("0")) {
+			try {
+				clinica.verificarNumero(entradas[9]);
+				clinica.verficarCedula(entradas[2]);
+				clinica.verficarTelefono(entradas[11]);
+				clinica.verificarContra(entradas[3]);
+				if (clinica.getUsuarioDAO().verificarIdUsuario(entradas[1])) {
+					vista.mostrarMensajeAdvertencia("El correo " + entradas[1] + " ya se encuentra en uso");
+				} else {
+					String pass = clinica.getUsuarioDAO().getSha().shaEncode(entradas[3]);
+					Usuario usuario = new Usuario(entradas[1], 3, entradas[2], pass, entradas[4] + " " + entradas[5],
+							entradas[6] + " " + entradas[7], entradas[8], Integer.parseInt(entradas[9]), entradas[10],
+							"A");
+					if (clinica.getUsuarioDAO().crearUsuario(usuario)) {
+						vista.getPanelAdministrador().getPanelCrearEmpleado().limpiarCampos();
+						Telefono telefono = new Telefono(usuario.getCorreo(), entradas[11], "A");
+						if (clinica.getUsuarioDAO().getTelefonoDAO().crearTelefono(telefono)) {
+							vista.mostrarMensajeInformacion("Se ha registrado el empleado");
+						} else {
+							vista.mostrarMensajeInformacion(
+									"No se ha podido registrar el empleado, verifique el número de telefono");
+						}
+					} else {
+						vista.mostrarMensajeInformacion("No se ha podido registrar el cliente");
+					}
+				}
+			} catch (ExceptionNumero e) {
+				vista.mostrarMensajeError(e.getMessage());
+			} catch (ExceptionCedula e) {
+				vista.mostrarMensajeError(e.getMessage());
+			} catch (ExceptionTelefono e) {
+				vista.mostrarMensajeError(e.getMessage());
+			} catch (Exception e) {
+			}
+
+		} else {
+			vista.mostrarMensajeAdvertencia(entradas[1]);
+		}
+	}
+
+	public void realizarFactura() {
+		String[] entradas = vista.getPanelEmpleado().getPanelEmpleadoServicio().verificarCampos();
+		if (entradas[0].equals("0")) {
+
+		} else {
+			vista.mostrarMensajeAdvertencia(entradas[1]);
+		}
+	}
+
 }

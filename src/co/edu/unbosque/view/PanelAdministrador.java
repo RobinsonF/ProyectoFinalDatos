@@ -14,13 +14,15 @@ public class PanelAdministrador extends JPanel{
 	private final String COMANDO_VERMASCOTA = "VERMASCOTAS";
 	private final String COMANDO_VERUSUARIOS = "VERUSUARIOS";
 	private final String COMANDO_VOLVER = "VOLVER4";
-	private final String COMANDO_BORRAR = "BORRARUSUARIO";
+	private final String COMANDO_BORRAR = "BORRARUSUARIO12345";
 	private final String COMANDO_EDITAR = "EDITARUSUARIO";
 	private final String COMANDO_BORRARM = "BORRARM";
 	private final String COMANDO_EDITARM = "EDITARM";
+	private final String COMANDO_CREAREMPLEADO = "CREAREMPLEADO";
 	private JButton btnVerMascota;
 	private JButton btnVerUsuarios;
 	private JButton btnVolver;
+	private JButton btnCrearEmpleado;
 	private PanelFiltroMascotaA panelFiltroMascotaA;
 	private PanelFiltroUsuario panelFiltroUsuario;
 	private PanelTablas panelTablaMascota;
@@ -29,6 +31,9 @@ public class PanelAdministrador extends JPanel{
 	private JPanel panel;
 	private JPanel panelFiltroMascota;
 	private PanelInicioAdmin panelInicioAdmin;
+	private PanelEditarUsuarioA panelEditarUsuario;
+	private PanelEditarMascotaA panelEditarMascota;
+	private PanelCrearEmpleado panelCrearEmpleado;
 	private JPanel panelInfoUsuario;
 	private JPanel panelInformacionMascota;
 	private JPanel panelBotones;
@@ -56,6 +61,8 @@ public class PanelAdministrador extends JPanel{
 		btnEliminar2.setActionCommand(COMANDO_BORRARM);
 		btnEditar2 = new JButton("Editar");
 		btnEditar2.setActionCommand(COMANDO_EDITARM);
+		btnCrearEmpleado = new JButton("Registrar empleado");
+		btnCrearEmpleado.setActionCommand(COMANDO_CREAREMPLEADO);
 		panelBotones = new JPanel();
 		panelBotones.setLayout(new GridLayout(1, 2));
 		panelBotones.add(btnEditar);
@@ -66,6 +73,9 @@ public class PanelAdministrador extends JPanel{
 		panelBotones2.add(btnEliminar2);
 		panelFiltroMascotaA = new PanelFiltroMascotaA();
 		panelFiltroUsuario = new PanelFiltroUsuario();
+		panelEditarUsuario = new PanelEditarUsuarioA();
+		panelEditarMascota = new PanelEditarMascotaA();
+		panelCrearEmpleado = new PanelCrearEmpleado();
 		panelTablaMascota = new PanelTablas();
 		panelTablaUsuario = new PanelTablas();
 		panelFiltroMascota = new JPanel();
@@ -82,9 +92,10 @@ public class PanelAdministrador extends JPanel{
 		panelFiltroU.setLayout(new GridLayout(2, 1));
 		panelFiltroU.add(panelFiltroUsuario);
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(3, 1));
+		panel.setLayout(new GridLayout(4, 1));
 		panel.add(btnVerMascota);
 		panel.add(btnVerUsuarios);
+		panel.add(btnCrearEmpleado);
 		panel.add(btnVolver);
 		panelInicioAdmin = new PanelInicioAdmin();
 		splitPane = new JSplitPane();
@@ -233,7 +244,7 @@ public class PanelAdministrador extends JPanel{
 	public void setBtnEditar(JButton btnEditar) {
 		this.btnEditar = btnEditar;
 	}
-
+	
 	public String getCOMANDO_BORRAR() {
 		return COMANDO_BORRAR;
 	}
@@ -289,5 +300,42 @@ public class PanelAdministrador extends JPanel{
 	public void setPanelTodoM(JPanel panelTodoM) {
 		this.panelTodoM = panelTodoM;
 	}
+
+	public PanelEditarUsuarioA getPanelEditarUsuario() {
+		return panelEditarUsuario;
+	}
+
+	public void setPanelEditarUsuario(PanelEditarUsuarioA panelEditarUsuario) {
+		this.panelEditarUsuario = panelEditarUsuario;
+	}
+
+	public PanelEditarMascotaA getPanelEditarMascota() {
+		return panelEditarMascota;
+	}
+
+	public void setPanelEditarMascota(PanelEditarMascotaA panelEditarMascota) {
+		this.panelEditarMascota = panelEditarMascota;
+	}
+
+	public JButton getBtnCrearEmpleado() {
+		return btnCrearEmpleado;
+	}
+
+	public void setBtnCrearEmpleado(JButton btnCrearEmpleado) {
+		this.btnCrearEmpleado = btnCrearEmpleado;
+	}
+
+	public String getCOMANDO_CREAREMPLEADO() {
+		return COMANDO_CREAREMPLEADO;
+	}
+
+	public PanelCrearEmpleado getPanelCrearEmpleado() {
+		return panelCrearEmpleado;
+	}
+
+	public void setPanelCrearEmpleado(PanelCrearEmpleado panelCrearEmpleado) {
+		this.panelCrearEmpleado = panelCrearEmpleado;
+	}
+	
 	
 }
