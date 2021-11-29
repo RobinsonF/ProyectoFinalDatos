@@ -3,11 +3,11 @@ package co.edu.unbosque.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.WindowConstants;
 
 import co.edu.unbosque.model.Clinica;
 import co.edu.unbosque.model.ExceptionCedula;
@@ -15,6 +15,7 @@ import co.edu.unbosque.model.ExceptionNumero;
 import co.edu.unbosque.model.ExceptionTelefono;
 import co.edu.unbosque.model.persistence.Color;
 import co.edu.unbosque.model.persistence.Especie;
+import co.edu.unbosque.model.persistence.Factura;
 import co.edu.unbosque.model.persistence.FormaPago;
 import co.edu.unbosque.model.persistence.Mascota;
 import co.edu.unbosque.model.persistence.Raza;
@@ -27,7 +28,6 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class Controller implements ActionListener {
@@ -235,16 +235,19 @@ public class Controller implements ActionListener {
 		}
 
 		if (comando.equals(vista.getPanelEmpleado().getCOMANDO_VERFACTURA())) {
-			String path = "C:\\Users\\ROBINSON\\eclipse-workspace\\ProyectoFinal\\src\\Reportes\\factura.jrxml";
+			String path = "Reportes\\factura2.jrxml";
+			clinica.getUsuarioDAO().getConex().conectarDB();
 			try {
 				JasperReport reporte = JasperCompileManager.compileReport(path);
 				JasperPrint jPrint = JasperFillManager.fillReport(reporte, null, clinica.getUsuarioDAO().getConex().getConnection());
 				JasperViewer viewer = new JasperViewer(jPrint);
-//				viewer.setDefaultCloseOperation(0);
+				viewer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+				viewer.setTitle("Factura");
 				viewer.setVisible(true);
 			} catch (JRException e1) {
 				e1.printStackTrace();
 			}
+			clinica.getUsuarioDAO().getConex().cerrarDB();
 
 		}
 
@@ -1140,7 +1143,17 @@ public class Controller implements ActionListener {
 	public void realizarFactura() {
 		String[] entradas = vista.getPanelEmpleado().getPanelEmpleadoServicio().verificarCampos();
 		if (entradas[0].equals("0")) {
+			Factura factura = new Factura(Integer.parseInt(entradas[6]), entradas[1], entradas[4], new Date(), "A");
+			if(clinica.getFacturaDAO().crearFactura(factura)) {
+				if(clinica.getFacturaDAO().getFacturaDetalleDAO().crearFacturaDetalle(""+factura.getIdFactura(), entradas[5], Integer.parseInt(entradas[2]))) {
+					vista.mostrarMensajeInformacion("Se ha generado correctamente la factura");
+				}else {
+					vista.mostrarMensajeInformacion("No se ha podido generar la factura");
+				}
 
+			}else {
+				vista.mostrarMensajeInformacion("No se ha podido generar la factura");
+			}
 		} else {
 			vista.mostrarMensajeAdvertencia(entradas[1]);
 		}

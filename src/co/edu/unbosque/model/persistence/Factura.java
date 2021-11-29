@@ -6,8 +6,8 @@ public class Factura {
 
 	private int idFactura;
 	private String idUsuario = "";
-	private int idFormaPago;
-	private String formaPago;
+	private String idFormaPago = "";
+	private String formaPago = "";
 	private Date fechaGeneracion;
 	private String estado = "";
 	
@@ -15,23 +15,13 @@ public class Factura {
 		
 	}
 	
-	public Factura(int idFactura, String idUsuario, int idFormaPago, Date fechaGeneracion, String estado) {
+	public Factura(int idFactura, String idUsuario, String formaPago, Date fechaGeneracion, String estado) {
 		this.idFactura = idFactura;
-		this.idUsuario = idUsuario;
-		this.idFormaPago = idFormaPago;
-		this.fechaGeneracion = fechaGeneracion;
-		this.estado = estado;
-	}
-	
-
-	public Factura(String idUsuario, String formaPago, Date fechaGeneracion, String estado) {
 		this.idUsuario = idUsuario;
 		this.formaPago = formaPago;
 		this.fechaGeneracion = fechaGeneracion;
 		this.estado = estado;
 	}
-
-
 
 	public int getIdFactura() {
 		return idFactura;
@@ -49,12 +39,20 @@ public class Factura {
 		this.idUsuario = idUsuario;
 	}
 
-	public int getIdFormaPago() {
+	public String getIdFormaPago() {
 		return idFormaPago;
 	}
 
-	public void setIdFormaPago(int idFormaPago) {
+	public void setIdFormaPago(String idFormaPago) {
 		this.idFormaPago = idFormaPago;
+	}
+
+	public String getFormaPago() {
+		return formaPago;
+	}
+
+	public void setFormaPago(String formaPago) {
+		this.formaPago = formaPago;
 	}
 
 	public Date getFechaGeneracion() {
@@ -71,15 +69,6 @@ public class Factura {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
-	}
-
-	public String getFormaPago() {
-		return formaPago;
-	}
-
-	public void setFormaPago(String formaPago) {
-		this.formaPago = formaPago;
-	}
-	
+	}	
 		
 }

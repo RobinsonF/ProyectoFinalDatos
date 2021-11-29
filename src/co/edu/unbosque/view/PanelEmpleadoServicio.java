@@ -17,6 +17,7 @@ import co.edu.unbosque.model.persistence.Servicio;
 
 public class PanelEmpleadoServicio extends JPanel {
 	private final String COMANDO_REGISTRARFACTURA = "REGISTRARFACTURA2";
+	private JLabel labelIdFactura;
 	private JLabel labelCedula;
 	private JLabel labelServicio;
 	private JLabel labelPago;
@@ -27,17 +28,20 @@ public class PanelEmpleadoServicio extends JPanel {
 	private JComboBox<String> comboPago;
 	private JTextField txtCantidad;
 	private JTextField txtDescuento;
+	private JTextField txtIdFactura;
 	private JButton btnConfirmar;
 	private JPanel panel;
 
 	public PanelEmpleadoServicio() {
 		setBorder(new TitledBorder("Servicio"));
 		setLayout(new BorderLayout());
+		labelIdFactura = new JLabel("IdFactura: ");
 		labelCedula = new JLabel("Cedula: ");
 		labelServicio = new JLabel("Servicio: ");
 		labelPago = new JLabel("Forma de pago: ");
 		labelCantidad = new JLabel("Cantidad: ");
 		labelDescuento = new JLabel("Descuento: ");
+		txtIdFactura = new JTextField();
 		txtCedula = new JTextField();
 		txtCantidad = new JTextField();
 		txtDescuento = new JTextField();
@@ -46,7 +50,9 @@ public class PanelEmpleadoServicio extends JPanel {
 		btnConfirmar = new JButton("Confirmar");
 		btnConfirmar.setActionCommand(COMANDO_REGISTRARFACTURA);
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(5, 5));
+		panel.setLayout(new GridLayout(6, 6));
+		panel.add(labelIdFactura);
+		panel.add(txtIdFactura);
 		panel.add(labelCedula);
 		panel.add(txtCedula);
 		panel.add(labelServicio);
@@ -62,16 +68,17 @@ public class PanelEmpleadoServicio extends JPanel {
 	}
 
 	public String[] verificarCampos() {
-		String[] entradas = new String[6];
+		String[] entradas = new String[7];
 		entradas[0] = "0";
 		if (!"".equals(txtCedula.getText()) && !"".equals(txtCantidad.getText()) && !"".equals(txtDescuento.getText())
 				&& !"Seleccione".equals(comboPago.getSelectedItem().toString())
-				&& !"Seleccione".equals(comboServicio.getSelectedItem().toString())) {
+				&& !"Seleccione".equals(comboServicio.getSelectedItem().toString()) && !"".equals(txtIdFactura.getText())) {
 			entradas[1] = txtCedula.getText();
 			entradas[2] = txtCantidad.getText();
 			entradas[3] = txtDescuento.getText();
 			entradas[4] = comboPago.getSelectedItem().toString();
 			entradas[5] = comboServicio.getSelectedItem().toString();
+			entradas[6] = txtIdFactura.getText();
 
 		} else {
 			entradas[0] = "1";

@@ -23,10 +23,10 @@ public class FacturaDAO {
 		try {
 			conex.conectarDB();
 			Statement smt = conex.getConnection().createStatement();
-			smt.executeUpdate("INSERT INTO factura (idusuario, idformapago, fechageneracion, estado) VALUES"
-					+ factura.getIdUsuario() + "', (select idpago from formapago where nombre = '"
-					+ factura.getFormaPago() + "'),'" + formato.format(factura.getFechaGeneracion()) + "', '"
-					+ factura.getEstado() + "'");
+			smt.executeUpdate("INSERT INTO factura (idfactura,idusuario, idformapago, fechageneracion, estado) VALUES("
+					+ factura.getIdFactura() + ", (SELECT correo FROM usuario WHERE cedula = '" + factura.getIdUsuario()
+					+ "'), (select idpago from formapago where nombre = '" + factura.getFormaPago() + "'),'"
+					+ formato.format(factura.getFechaGeneracion()) + "', '" + factura.getEstado() + "')");
 			verificar = true;
 			smt.close();
 			conex.cerrarDB();

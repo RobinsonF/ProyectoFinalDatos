@@ -31,4 +31,44 @@ public class ServicioDAO {
 		}
 		return listaServicio;
 	}
+
+	public String consultarIdServicio(String nombre) {
+		conex.conectarDB();
+		String idServicio = "";
+		try {
+			PreparedStatement consulta = conex.getConnection()
+					.prepareStatement("SELECT idservicio FROM servicio WHERE nombre = '" + nombre + "'");
+			ResultSet res = consulta.executeQuery();
+			if (res.next()) {
+				idServicio = res.getString("idservicio");
+			}
+			res.close();
+			consulta.execute();
+			consulta.close();
+			conex.cerrarDB();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return idServicio;
+	}
+
+	public String consultarPrecioTotal(String idServicio) {
+		conex.conectarDB();
+		String precioTotal = "";
+		try {
+			PreparedStatement consulta = conex.getConnection()
+					.prepareStatement("SELECT preciototal FROM servicio WHERE idservicio = " + idServicio);
+			ResultSet res = consulta.executeQuery();
+			if (res.next()) {
+				precioTotal = "" + res.getInt("preciototal");
+			}
+			res.close();
+			consulta.execute();
+			consulta.close();
+			conex.cerrarDB();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return precioTotal;
+	}
 }

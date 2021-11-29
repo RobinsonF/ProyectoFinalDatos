@@ -300,8 +300,6 @@ public class UsuarioDAO {
 
 	public boolean editarUsuario(String[][] matriz) {
 		boolean verificar = false;
-		System.out.println("UPDATE usuario SET " + matriz[1][0] + " = '" + matriz[1][1] + "' WHERE cedula = '"
-					+ matriz[1][2] + "'");
 		try {
 			conex.conectarDB();
 			Statement smt = conex.getConnection().createStatement();
