@@ -24,6 +24,16 @@ public class Servicio {
 		this.precioTotal = precioTotal;
 		this.estado = estado;
 	}
+	
+	
+
+	public Servicio(String nombre, String descripcion, int precio, int precioTotal, String estado) {
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.precioTotal = precioTotal;
+		this.estado = estado;
+	}
 
 	public int getIdServicio() {
 		return idServicio;

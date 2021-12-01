@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.border.TitledBorder;
 
 public class PanelCliente extends JPanel {
 
@@ -15,16 +16,22 @@ public class PanelCliente extends JPanel {
 	private final String COMANDO_BORRAR = "BORRARMASCOTA";
 	private final String COMANDO_EDITAR = "EDITARMASCOTA";
 	private final String COMANDO_VOLVER = "VOLVER3";
+	private final String COMANDO_VERFACTURA = "VERFACTURA15";
+	private final String COMANDO_VERFACTURA2 = "VERFACTURA16";
 	private JButton btnVerMascota;
 	private JButton btnAgregarMascota;
 	private JButton btnVerInfoCliente;
+	private JButton btnVerFactura;
 	private JButton btnVolver;
+	private JButton btnVerFacturaDetalle;
 	private PanelTablas panelTablaMascota;
+	private PanelTablas panelTablaFactura;
 	private PanelFiltroMascotaC panelFiltro;
 	private PanelCrearMascota panelCrearMascota;
 	private PanelClienteInformacion panelClienteInformacion;
 	private PanelInicioCliente panelInicioCliente;
 	private PanelEditarMascotaC panelEditarMascota;
+	private PanelFiltroFactura panelFiltroFactura;
 	private JSplitPane splitPane;
 	private JPanel panel;
 	private JPanel panelFiltroMascota;
@@ -32,6 +39,8 @@ public class PanelCliente extends JPanel {
 	private JPanel panelBotones;
 	private JButton btnEliminar;
 	private JButton btnEditar;
+	private JPanel panelFactura;
+	private JSplitPane splitPane2;
 
 	public PanelCliente() {
 		setLayout(new GridLayout(1, 1));
@@ -41,11 +50,15 @@ public class PanelCliente extends JPanel {
 		btnAgregarMascota.setActionCommand(COMANDO_AGREGARMASCOTA);
 		btnVerInfoCliente = new JButton("Ver mi información");
 		btnVerInfoCliente.setActionCommand(COMANDO_VERINFO);
+		btnVerFactura = new JButton("Ver factura");
+		btnVerFactura.setActionCommand(COMANDO_VERFACTURA);
 		btnVolver = new JButton("Cerrar sesion");
 		btnVolver.setActionCommand(COMANDO_VOLVER);
+		panelTablaFactura = new PanelTablas();
 		panelTablaMascota = new PanelTablas();
 		panelCrearMascota = new PanelCrearMascota();
 		panelClienteInformacion = new PanelClienteInformacion();
+		panelFiltroFactura = new PanelFiltroFactura();
 		panelEditarMascota = new PanelEditarMascotaC();
 		panelFiltro = new PanelFiltroMascotaC();
 		panelBotones = new JPanel();
@@ -64,12 +77,21 @@ public class PanelCliente extends JPanel {
 		panelFiltroMascota.setLayout(new GridLayout(2, 1));
 		panelFiltroMascota.add(panelFiltro);
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(4, 1));
+		panel.setLayout(new GridLayout(5, 1));
 		panel.add(btnVerMascota);
 		panel.add(btnAgregarMascota);
 		panel.add(btnVerInfoCliente);
+		panel.add(btnVerFactura);
 		panel.add(btnVolver);
+		btnVerFacturaDetalle = new JButton("Ver detalles");
+		btnVerFacturaDetalle.setActionCommand(COMANDO_VERFACTURA2);
+		panelFactura = new JPanel();
+		panelFactura.setBorder(new TitledBorder("Facturas"));
+		panelFactura.setLayout(new BorderLayout());				
 		panelInicioCliente = new PanelInicioCliente();
+		splitPane2 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPane2.setTopComponent(panelFiltroFactura);
+		splitPane2.setEnabled(false);
 		splitPane = new JSplitPane();
 		splitPane.setLeftComponent(panel);
 		splitPane.setRightComponent(panelInicioCliente);
@@ -235,5 +257,60 @@ public class PanelCliente extends JPanel {
 	public String getCOMANDO_VOLVER() {
 		return COMANDO_VOLVER;
 	}
-	
+
+	public PanelTablas getPanelTablaFactura() {
+		return panelTablaFactura;
+	}
+
+	public void setPanelTablaFactura(PanelTablas panelTablaFactura) {
+		this.panelTablaFactura = panelTablaFactura;
+	}
+
+	public JButton getBtnVerFactura() {
+		return btnVerFactura;
+	}
+
+	public void setBtnVerFactura(JButton btnVerFactura) {
+		this.btnVerFactura = btnVerFactura;
+	}
+
+	public String getCOMANDO_VERFACTURA() {
+		return COMANDO_VERFACTURA;
+	}
+
+	public JButton getBtnVerFacturaDetalle() {
+		return btnVerFacturaDetalle;
+	}
+
+	public void setBtnVerFacturaDetalle(JButton btnVerFacturaDetalle) {
+		this.btnVerFacturaDetalle = btnVerFacturaDetalle;
+	}
+
+	public JPanel getPanelFactura() {
+		return panelFactura;
+	}
+
+	public void setPanelFactura(JPanel panelFactura) {
+		this.panelFactura = panelFactura;
+	}
+
+	public String getCOMANDO_VERFACTURA2() {
+		return COMANDO_VERFACTURA2;
+	}
+
+	public PanelFiltroFactura getPanelFiltroFactura() {
+		return panelFiltroFactura;
+	}
+
+	public void setPanelFiltroFactura(PanelFiltroFactura panelFiltroFactura) {
+		this.panelFiltroFactura = panelFiltroFactura;
+	}
+
+	public JSplitPane getSplitPane2() {
+		return splitPane2;
+	}
+
+	public void setSplitPane2(JSplitPane splitPane2) {
+		this.splitPane2 = splitPane2;
+	}
 }

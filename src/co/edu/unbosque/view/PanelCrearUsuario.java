@@ -146,8 +146,7 @@ public class PanelCrearUsuario extends JPanel {
 		String[] entradas = new String[12];
 		entradas[0] = "0";
 		if (!"".equals(txtCorreo.getText()) && !"".equals(txtCedula.getText()) && !"".equals(passContra.getText())
-				&& !"".equals(txtPrimerNombre.getText()) && !"".equals(txtSegundoNombre.getText())
-				&& !"".equals(txtPrimerApellido.getText()) && !"".equals(txtSegundoApellido.getText())
+				&& !"".equals(txtPrimerNombre.getText()) && !"".equals(txtPrimerApellido.getText())
 				&& !"".equals(txtDirrecion.getText()) && !"".equals(txtEdad.getText())
 				&& !"Seleccione".equals(comboSexo.getSelectedItem().toString()) && !"".equals(txtTelefono.getText())) {
 			entradas[1] = txtCorreo.getText();
@@ -417,5 +416,5 @@ public class PanelCrearUsuario extends JPanel {
 	public String getCOMANDO_VOLVER() {
 		return COMANDO_VOLVER;
 	}
-	
+
 }

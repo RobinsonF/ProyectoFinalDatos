@@ -11,10 +11,13 @@ public class PanelEmpleado extends JPanel{
 	private final String COMANDO_REGISTRARFACTURA = "REGISTRARFACTURA";
 	private final String COMANDO_CERRARSESION = "CERRARSESION";
 	private final String COMANDO_VERFACTURA = "VERFACTURA";
+	private final String COMANDO_REPORTES = "REPORTES";
 	private JButton btnFactura;
 	private JButton btnCerrar;
 	private JButton btnVerFacturas;
+	private JButton btnReportes;
 	private PanelEmpleadoServicio panelEmpleadoServicio;
+	private PanelReporte panelReporte;
 	private JPanel panelBotones;
 	private JPanel panel;
 	private JSplitPane splitPane;
@@ -27,17 +30,32 @@ public class PanelEmpleado extends JPanel{
 		btnCerrar.setActionCommand(COMANDO_CERRARSESION);
 		btnVerFacturas = new JButton("Ver Facturas");
 		btnVerFacturas.setActionCommand(COMANDO_VERFACTURA);
+		btnReportes = new JButton("Reportes");
+		btnReportes.setActionCommand(COMANDO_REPORTES);
 		panelEmpleadoServicio = new PanelEmpleadoServicio();
+		panelReporte = new PanelReporte();
 		panelBotones = new JPanel();
 		panelBotones.setLayout(new GridLayout(3, 1));
 		panelBotones.add(btnFactura);
-		panelBotones.add(btnVerFacturas);
+		panelBotones.add(btnReportes);
 		panelBotones.add(btnCerrar);
 		panel = new JPanel();
 		splitPane = new JSplitPane();
 		splitPane.setLeftComponent(panelBotones);
 		splitPane.setRightComponent(panel);
 		add(splitPane);
+	}
+
+	public JButton getBtnReportes() {
+		return btnReportes;
+	}
+
+	public void setBtnReportes(JButton btnReportes) {
+		this.btnReportes = btnReportes;
+	}
+
+	public String getCOMANDO_REPORTES() {
+		return COMANDO_REPORTES;
 	}
 
 	public JButton getBtnFactura() {
@@ -106,6 +124,15 @@ public class PanelEmpleado extends JPanel{
 
 	public String getCOMANDO_VERFACTURA() {
 		return COMANDO_VERFACTURA;
-	}	
+	}
 
+	public PanelReporte getPanelReporte() {
+		return panelReporte;
+	}
+
+	public void setPanelReporte(PanelReporte panelReporte) {
+		this.panelReporte = panelReporte;
+	}	
+	
+	
 }

@@ -1,15 +1,19 @@
 package co.edu.unbosque.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import co.edu.unbosque.model.persistence.FacturaDAO;
 import co.edu.unbosque.model.persistence.ServicioDAO;
 import co.edu.unbosque.model.persistence.UsuarioDAO;
 
 public class Clinica {
 
+	public static final Pattern VALID_EMAIL_ADDRESSREGEX = Pattern.compile("^[A-Z0-9.%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+			Pattern.CASE_INSENSITIVE);
 	private UsuarioDAO usuarioDAO;
 	private ServicioDAO servicioDAO;
 	private FacturaDAO facturaDAO;
-	
 
 	public Clinica() {
 		usuarioDAO = new UsuarioDAO();
@@ -31,6 +35,10 @@ public class Clinica {
 	public void verificarNumero(String numero) throws ExceptionNumero {
 		if (!soloNumeros(numero)) {
 			throw new ExceptionNumero("Caracter no permitido en campo numérico");
+		} else {
+			if (Integer.parseInt(numero) <= 0) {
+				throw new ExceptionNumero("Ingrese una cantidad minimo de uno");
+			}
 		}
 	}
 
@@ -39,6 +47,14 @@ public class Clinica {
 			if (numero.length() < 8) {
 				throw new ExceptionNumero("Mínimo 8 caractares para la contraseña");
 			}
+		}
+	}
+
+	public void verificarCorreo(String correo) throws ExceptionNumero {
+		Matcher matcher = VALID_EMAIL_ADDRESSREGEX.matcher(correo);
+		if (matcher.find()) {
+		} else {
+			throw new ExceptionNumero("Correo invalido asegurese que contenga el @");
 		}
 	}
 
@@ -61,7 +77,6 @@ public class Clinica {
 			}
 		}
 	}
-
 
 	public UsuarioDAO getUsuarioDAO() {
 		return usuarioDAO;

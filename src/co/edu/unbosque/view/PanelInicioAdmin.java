@@ -1,5 +1,7 @@
 package co.edu.unbosque.view;
 
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,10 +12,11 @@ public class PanelInicioAdmin extends JPanel{
 
 	public PanelInicioAdmin() {
 		setLayout(null);
+		setBackground(new Color(117, 121, 121));
 		imagen2 = new ImageIcon(getClass().getResource("/imagenes/mascota1.jpg"));
 		labelImagen = new JLabel();
 		labelImagen.setIcon(imagen2);
-		labelImagen.setBounds(20, 20, 648, 400);
+		labelImagen.setBounds(10, 20, 625, 400);
 		add(labelImagen);
 	}
 	

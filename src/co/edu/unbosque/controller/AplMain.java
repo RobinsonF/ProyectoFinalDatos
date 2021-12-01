@@ -6,14 +6,16 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class AplMain {
 
 	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
 		try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            // UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel"); // NUEVO
+			UIManager.setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf");
 		} catch (UnsupportedLookAndFeelException e) {
-        } catch (ClassNotFoundException e) {
-        } catch (InstantiationException e) {
-        } catch (IllegalAccessException e) {
-        }
-        Controller controller = new Controller();
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		}
+		@SuppressWarnings("unused")
+		Controller control = new Controller();
 	}
 }

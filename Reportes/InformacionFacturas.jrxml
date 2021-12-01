@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InformacionFacturas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3a42f16d-f8a0-47fe-b417-5c81addab42c">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="187"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="801"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Proyecto"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT sum(facturadetalle.total) as total,
+	sum(facturadetalle.subtotal) as subtotal,
+	factura.idfactura,
+	usuario.cedula,
+	factura.fechageneracion
+FROM facturadetalle
+	INNER JOIN factura ON 
+	 facturadetalle.idfactura = factura.idfactura 
+	INNER JOIN usuario ON 
+	 factura.idusuario = usuario.correo
+	 GROUP BY usuario.cedula, factura.idfactura
+	 ORDER BY factura.idfactura]]>
+	</queryString>
+	<field name="total" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
+	</field>
+	<field name="subtotal" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="subtotal"/>
+		<property name="com.jaspersoft.studio.field.label" value="subtotal"/>
+	</field>
+	<field name="idfactura" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="idfactura"/>
+		<property name="com.jaspersoft.studio.field.label" value="idfactura"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="cedula" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cedula"/>
+		<property name="com.jaspersoft.studio.field.label" value="cedula"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+	</field>
+	<field name="fechageneracion" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fechageneracion"/>
+		<property name="com.jaspersoft.studio.field.label" value="fechageneracion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<group name="total">
+		<groupExpression><![CDATA[$F{total}]]></groupExpression>
+	</group>
+	<group name="subtotal">
+		<groupExpression><![CDATA[$F{subtotal}]]></groupExpression>
+	</group>
+	<group name="idfactura">
+		<groupExpression><![CDATA[$F{idfactura}]]></groupExpression>
+	</group>
+	<group name="cedula">
+		<groupExpression><![CDATA[$F{cedula}]]></groupExpression>
+	</group>
+	<group name="fechageneracion">
+		<groupExpression><![CDATA[$F{fechageneracion}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="550" height="44" uuid="26858848-dc07-412b-8bcd-92677a00caf2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Facturas]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="44" width="110" height="37" uuid="77243a59-5dba-46cd-af4c-11da1a79b8e9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="110" y="44" width="109" height="37" uuid="7cd39652-3237-42e0-9a28-88fa5bba34ba"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="220" y="44" width="110" height="37" uuid="68c1f25f-03d6-457c-808a-1e2307983680"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="330" y="44" width="110" height="37" uuid="8ad29ef2-f567-46eb-ba50-4e6cd0b1e4e7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="440" y="44" width="110" height="37" uuid="e62fb015-8488-4d01-8ece-1459202c3e61"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="110" y="44" width="109" height="37" uuid="13269d3a-aa39-419c-9fab-82aea398ae07"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cédula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="44" width="109" height="37" uuid="238ddb09-b3ae-4db0-a8bf-c578edb3b5b8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID Factura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="44" width="109" height="37" uuid="812db670-a865-45ba-ab06-9d5913b20e3a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de generación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="44" width="109" height="37" uuid="32d64864-f380-492d-82a5-1f89428b7033"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subtotal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="44" width="109" height="37" uuid="90b16d95-97dc-4894-91c7-e9a509bc2b46"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="38" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="110" height="37" uuid="45bc69df-560d-4d25-842e-eaefa5411e6f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="110" y="0" width="109" height="37" uuid="67a15776-dc87-4956-9b82-8aee7eca1df9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="220" y="0" width="110" height="37" uuid="4d7a6f68-a796-4629-b443-56ea85f53782"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="330" y="0" width="110" height="37" uuid="c8568027-7667-4205-93c9-533d122ac9f4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="440" y="0" width="110" height="37" uuid="001ed426-4884-417e-9c99-2ed9592114a4"/>
+			</rectangle>
+			<textField pattern="MMM d, yyyy">
+				<reportElement x="219" y="0" width="110" height="37" uuid="4a4e138c-104c-4f4c-a1d7-203c7f4c336a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{fechageneracion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
+				<reportElement x="330" y="0" width="110" height="37" uuid="42cd1f71-27e3-42b2-a704-b1b40d6dd31a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{subtotal}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.##;¤-#,##0.##">
+				<reportElement x="440" y="0" width="110" height="37" uuid="16c6abd4-8093-4cf4-a31e-b326918e30b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="-2" width="110" height="37" uuid="26e253f3-7813-4a4a-894b-a32050eac49a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idfactura}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="-2" width="110" height="37" uuid="837dc5ff-d31e-4cf2-afd4-67e6017d8155"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cedula}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="63" splitType="Stretch">
+			<textField pattern="MMM d, yyyy h:mm:ss a">
+				<reportElement x="0" y="30" width="160" height="30" uuid="4863a6be-3eb3-467e-84c2-15081aa63a7d"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="30" width="180" height="30" uuid="f5603b91-b865-4b08-a01c-d8164faeb3a3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

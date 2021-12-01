@@ -30,11 +30,13 @@ public class MascotaDAO {
 		try {
 			conex.conectarDB();
 			Statement smt = conex.getConnection().createStatement();
-			smt.executeUpdate("INSERT INTO mascota VALUES(" + "" + mascota.getIdMascota() + ",'" + mascota.getIdDueño()
-					+ "','" + mascota.getNombre() + "',(SELECT idespecie FROM especie WHERE nombre = '"
-					+ mascota.getIdEspecie() + "'),(SELECT idraza FROM raza WHERE nombre  = '" + mascota.getIdRaza()
-					+ "'),(SELECT idcolor FROM color WHERE nombre = '" + mascota.getIdColor() + "'),'"
-					+ formato.format(mascota.getAñoNacimiento()) + "','" + mascota.getEstado() + "')");
+			smt.executeUpdate(
+					"INSERT INTO mascota (idusuario, nombre, idespecie, idraza, idcolor, añonacimiento, estado) VALUES("
+							+ "'" + mascota.getIdDueño() + "','" + mascota.getNombre()
+							+ "',(SELECT idespecie FROM especie WHERE nombre = '" + mascota.getIdEspecie()
+							+ "'),(SELECT idraza FROM raza WHERE nombre  = '" + mascota.getIdRaza()
+							+ "'),(SELECT idcolor FROM color WHERE nombre = '" + mascota.getIdColor() + "'),'"
+							+ formato.format(mascota.getAñoNacimiento()) + "','" + mascota.getEstado() + "')");
 			verificar = true;
 			smt.close();
 			conex.cerrarDB();

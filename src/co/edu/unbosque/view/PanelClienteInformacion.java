@@ -77,7 +77,7 @@ public class PanelClienteInformacion extends JPanel {
 		comboOpcion.addItem("Telefeno");
 		comboOpcion.setActionCommand(COMANDO_DATOEDITAR);
 		panel = new JPanel();
-		panel.setLayout(new GridLayout(9, 9));
+		panel.setLayout(new GridLayout(8, 8));
 		panel.add(labelNombres);
 		panel.add(labelNombres2);
 		panel.add(labelApellidos);
@@ -94,8 +94,8 @@ public class PanelClienteInformacion extends JPanel {
 		panel.add(labelSexo2);
 		panel.add(labelEdad);
 		panel.add(labelEdad2);
-		panel.add(labelCombo);
-		panel.add(comboOpcion);
+//		panel.add(labelCombo);
+//		panel.add(comboOpcion);
 		panelNombresApellidos = new JPanel();
 		panelNombresApellidos.setLayout(new GridLayout(1, 2));
 		labelDato = new JLabel("Escriba el nuevo dato");
@@ -107,7 +107,7 @@ public class PanelClienteInformacion extends JPanel {
 		splitPane.setEnabled(false);
 		splitPane.setTopComponent(panel);
 		add(splitPane, BorderLayout.CENTER);
-		add(btnEditarInfo, BorderLayout.PAGE_END);
+//		add(btnEditarInfo, BorderLayout.PAGE_END);
 
 	}
 

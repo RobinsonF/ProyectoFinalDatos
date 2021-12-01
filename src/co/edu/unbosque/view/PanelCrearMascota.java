@@ -23,13 +23,11 @@ public class PanelCrearMascota extends JPanel {
 
 	private final String COMANDO_CREAR = "CREARMASCOTA";
 	private JLabel labelDatos;
-	private JLabel labelIdMascota;
 	private JLabel labelNombre;
 	private JLabel labelEspecie;
 	private JLabel labelRaza;
 	private JLabel labelColor;
 	private JLabel labelFecha;
-	private JTextField txtIdMascota;
 	private JTextField txtNombre;
 	private JComboBox<String> comboEspecie;
 	private JComboBox<String> comboRaza;
@@ -42,13 +40,11 @@ public class PanelCrearMascota extends JPanel {
 		setBorder(new TitledBorder("Aqui puedes registrar a tus mascotas"));
 		setLayout(new BorderLayout());		
 		labelDatos = new JLabel("Ingrese los datos de la mascota");
-		labelIdMascota = new JLabel("ID: ");
 		labelNombre = new JLabel("Nombre: ");
 		labelEspecie = new JLabel("Especie: ");
 		labelRaza = new JLabel("Raza: ");
 		labelColor = new JLabel("Color: ");
 		labelFecha = new JLabel("Fecha nacimiento: ");
-		txtIdMascota = new JTextField();
 		txtNombre = new JTextField();
 		comboEspecie = new JComboBox<String>();
 		comboRaza = new JComboBox<String>();
@@ -57,9 +53,7 @@ public class PanelCrearMascota extends JPanel {
 		btnConfirmar = new JButton("Registrar");
 		btnConfirmar.setActionCommand(COMANDO_CREAR);
 		panel1 = new JPanel();
-		panel1.setLayout(new GridLayout(7, 7));
-		panel1.add(labelIdMascota);
-		panel1.add(txtIdMascota);
+		panel1.setLayout(new GridLayout(5, 5));
 		panel1.add(labelNombre);
 		panel1.add(txtNombre);
 		panel1.add(labelEspecie);
@@ -80,9 +74,9 @@ public class PanelCrearMascota extends JPanel {
 		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = fechaNaci.getDate();
 		Date fechaHoy = new Date();
-		String[] entradas = new String[7];
+		String[] entradas = new String[6];
 		entradas[0] = "0";
-		if (!"".equals(txtIdMascota.getText()) && !"".equals(txtNombre.getText())
+		if (!"".equals(txtNombre.getText())
 				&& !"Seleccione".equals(comboColor.getSelectedItem().toString())
 				&& !"Seleccione".equals(comboEspecie.getSelectedItem().toString())
 				&& !"Seleccione".equals(comboRaza.getSelectedItem().toString()) && date != null) {
@@ -90,12 +84,11 @@ public class PanelCrearMascota extends JPanel {
 				entradas[0] = "1";
 				entradas[1] = "Fecha incorrecta";
 			} else {
-				entradas[1] = txtIdMascota.getText();
-				entradas[2] = txtNombre.getText();
-				entradas[3] = comboEspecie.getSelectedItem().toString();
-				entradas[4] = comboRaza.getSelectedItem().toString();
-				entradas[5] = comboColor.getSelectedItem().toString();
-				entradas[6] = formato.format(date);
+				entradas[1] = txtNombre.getText();
+				entradas[2] = comboEspecie.getSelectedItem().toString();
+				entradas[3] = comboRaza.getSelectedItem().toString();
+				entradas[4] = comboColor.getSelectedItem().toString();
+				entradas[5] = formato.format(date);
 			}
 		} else {
 			entradas[0] = "1";
@@ -123,7 +116,6 @@ public class PanelCrearMascota extends JPanel {
 	}
 
 	public void limpiarCampos() {
-		txtIdMascota.setText("");
 		txtNombre.setText("");
 		comboEspecie.setSelectedIndex(0);
 		comboRaza.setSelectedIndex(0);

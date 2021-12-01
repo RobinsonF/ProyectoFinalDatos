@@ -1,29 +1,41 @@
 package co.edu.unbosque.view;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import java.awt.Color;
 
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Graphics;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class PanelInfoLogin extends JPanel {
 
-	private Image imagen;
+	private ImageIcon imagen;
+	private JLabel labelImagen;
 
 	public PanelInfoLogin() {
-		setLayout(new GridLayout(1, 1));
+		setLayout(null);
+		setBackground(new Color(117, 121, 121));
+		imagen = new ImageIcon(getClass().getResource("/imagenes/logoPerro.jpg"));
+		labelImagen = new JLabel();
+		labelImagen.setIcon(imagen);
+		labelImagen.setBounds(14, 50, 366, 352);
+		add(labelImagen);
+
 	}
-	public void paint(Graphics g) {
-		imagen = new ImageIcon(getClass().getResource("/imagenes/mascotas-trabajo.jpg")).getImage();
-		g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-		setOpaque(false);
-		super.paint(g);
-	}
-	public Image getImagen() {
+
+	public ImageIcon getImagen() {
 		return imagen;
 	}
-	public void setImagen(Image imagen) {
+
+	public void setImagen(ImageIcon imagen) {
 		this.imagen = imagen;
 	}
+
+	public JLabel getLabelImagen() {
+		return labelImagen;
+	}
+
+	public void setLabelImagen(JLabel labelImagen) {
+		this.labelImagen = labelImagen;
+	}
+	
 }

@@ -72,6 +72,9 @@ public class Vista extends JFrame {
 		panelCliente.getBtnVolver().addActionListener(controller);
 		panelCliente.getPanelEditarMascota().getComboOpcion().addActionListener(controller);
 		panelCliente.getPanelClienteInformacion().getComboOpcion().addActionListener(controller);
+		panelCliente.getBtnVerFactura().addActionListener(controller);
+		panelCliente.getBtnVerFacturaDetalle().addActionListener(controller);
+		panelCliente.getPanelFiltroFactura().getBtnConfirmar().addActionListener(controller);
 		panelAdministrador.getBtnVerMascota().addActionListener(controller);
 		panelAdministrador.getBtnVerUsuarios().addActionListener(controller);
 		panelAdministrador.getBtnVolver().addActionListener(controller);
@@ -87,10 +90,23 @@ public class Vista extends JFrame {
 		panelAdministrador.getPanelEditarMascota().getBtnConfirmar().addActionListener(controller);
 		panelAdministrador.getBtnCrearEmpleado().addActionListener(controller);
 		panelAdministrador.getPanelCrearEmpleado().getBtnCrear().addActionListener(controller);
+		panelAdministrador.getBtnRegistrarServicio().addActionListener(controller);
+		panelAdministrador.getPanelAdministradorServicio().getBtnConfirmar().addActionListener(controller);
+		panelAdministrador.getPanelFiltroServicio().getBtnConfirmar().addActionListener(controller);
+		panelAdministrador.getBtnAgregarServicio().addActionListener(controller);
+		panelAdministrador.getBtnEliminarServicio().addActionListener(controller);
+		panelAdministrador.getPanelEditarServicio().getBtnConfirmar().addActionListener(controller);
+		panelAdministrador.getPanelEditarServicio().getComboDesicion().addActionListener(controller);
+		panelAdministrador.getBtnEditarServicio().addActionListener(controller);
 		panelEmpleado.getBtnFactura().addActionListener(controller);
 		panelEmpleado.getBtnCerrar().addActionListener(controller);
 		panelEmpleado.getPanelEmpleadoServicio().getBtnConfirmar().addActionListener(controller);
 		panelEmpleado.getBtnVerFacturas().addActionListener(controller);
+		panelEmpleado.getBtnReportes().addActionListener(controller);
+		panelEmpleado.getPanelReporte().getBtnClientes().addActionListener(controller);
+		panelEmpleado.getPanelEmpleadoServicio().getBtnAgregarServicio().addActionListener(controller);
+		panelEmpleado.getPanelReporte().getBtnFactura().addActionListener(controller);
+		panelEmpleado.getPanelReporte().getBtnMascotas().addActionListener(controller);
 	}
 
 	/**

@@ -7,6 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.WindowConstants;
 
 import co.edu.unbosque.model.Clinica;
@@ -35,6 +38,7 @@ public class Controller implements ActionListener {
 	private Vista vista;
 	private Clinica clinica;
 	private String usuario = "";
+	int contador = 0;
 
 	public Controller() {
 		vista = new Vista(this);
@@ -136,7 +140,7 @@ public class Controller implements ActionListener {
 				vista.getPanelUsuario().getPanelEditarMascota().recibirDatosMascota(entradas[1], entradas[3],
 						entradas[4], entradas[5], entradas[6], entradas[7]);
 			} else {
-				vista.mostrarMensajeAdvertencia("Seleccione al menos un dato");
+				vista.mostrarMensajeAdvertencia("Seleccione un dato");
 			}
 
 		}
@@ -234,21 +238,159 @@ public class Controller implements ActionListener {
 			realizarFactura();
 		}
 
-		if (comando.equals(vista.getPanelEmpleado().getCOMANDO_VERFACTURA())) {
-			String path = "Reportes\\factura2.jrxml";
-			clinica.getUsuarioDAO().getConex().conectarDB();
+		if (comando.equals(vista.getPanelEmpleado().getCOMANDO_REPORTES())) {
+			vista.getPanelEmpleado().getSplitPane().setRightComponent(vista.getPanelEmpleado().getPanelReporte());
+		}
+
+		if (comando.equals(vista.getPanelCliente().getCOMANDO_VERFACTURA())) {
+			ArrayList<Factura> listaFactura = clinica.getFacturaDAO().consultarFacturas(this.usuario);
+			ArrayList<FormaPago> listaFormas = clinica.getFacturaDAO().getFormaPagoDAO().consultarFomaPagos();
+			vista.getPanelCliente().getPanelFiltroFactura().cargarComboBox(listaFormas);
+			String[][] infoFactura = clinica.getFacturaDAO().mostarInfoFactura(listaFactura);
+			vista.getPanelCliente().getPanelTablaFactura().limpiarPanel();
+			vista.getPanelCliente().getPanelTablaFactura().mostrarTablaFactura(infoFactura);
+			vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getPanelTablaFactura(),
+					BorderLayout.CENTER);
+			vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getBtnVerFacturaDetalle(),
+					BorderLayout.PAGE_END);
+			vista.getPanelCliente().getSplitPane2().setBottomComponent(vista.getPanelCliente().getPanelFactura());
+			vista.getPanelCliente().getSplitPane2().setDividerLocation(150);
+			vista.getPanelCliente().getSplitPane().setRightComponent(vista.getPanelCliente().getSplitPane2());
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_REGISTRARSERVICIO())) {
+			ArrayList<Servicio> listaServicios = clinica.getServicioDAO().consultarServicios();
+			String[][] infoServicios = clinica.getServicioDAO().mostarInfoServicio(listaServicios);
+			vista.getPanelAdministrador().getPanelTablaServicios().limpiarPanel();
+			vista.getPanelAdministrador().getPanelTablaServicios().mostrarTablaServicios(infoServicios);
+			vista.getPanelAdministrador().getSplitPane()
+					.setRightComponent(vista.getPanelAdministrador().getSplitPane2());
+		}
+
+		if (comando
+				.equals(vista.getPanelAdministrador().getPanelAdministradorServicio().getCOMANDO_REGISTARSERVICIO())) {
+			registrarServicio();
+		}
+
+		if (comando.equals(vista.getPanelCliente().getCOMANDO_VERFACTURA2())) {
+			if (vista.getPanelCliente().getPanelTablaFactura().verificarDatosTablaFactura() == 1) {
+				String[] entradas = vista.getPanelCliente().getPanelTablaFactura().obtenerDatosFactura();
+				String path = "Reportes\\FacturaCliente.jrxml";
+				clinica.getUsuarioDAO().getConex().conectarDB();
+				try {
+					JasperReport reporte = JasperCompileManager.compileReport(path);
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("facturaid", entradas[1]);
+					JasperPrint jPrint = JasperFillManager.fillReport(reporte, map,
+							clinica.getUsuarioDAO().getConex().getConnection());
+					JasperViewer viewer = new JasperViewer(jPrint, false);
+					viewer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					viewer.setTitle("Factura");
+					viewer.setVisible(true);
+				} catch (JRException e1) {
+					e1.printStackTrace();
+				}
+				clinica.getUsuarioDAO().getConex().cerrarDB();
+			}
+
+		}
+
+		if (comando.equals(vista.getPanelEmpleado().getPanelReporte().getCOMANDO_CLIENTE())) {
+			reporteClientes();
+		}
+
+		if (comando.equals(vista.getPanelEmpleado().getPanelEmpleadoServicio().getCOMANDO_AGREARSERVICIO())) {
 			try {
-				JasperReport reporte = JasperCompileManager.compileReport(path);
-				JasperPrint jPrint = JasperFillManager.fillReport(reporte, null, clinica.getUsuarioDAO().getConex().getConnection());
-				JasperViewer viewer = new JasperViewer(jPrint);
-				viewer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-				viewer.setTitle("Factura");
-				viewer.setVisible(true);
+				System.out.println(contador);
+				String[] entradas = vista.getPanelEmpleado().getPanelEmpleadoServicio().verificarCampos();
+				int numeroServicios = Integer.parseInt(entradas[7]);
+				if (contador < numeroServicios) {
+					String[] entradas2 = vista.getPanelEmpleado().getPanelEmpleadoServicio().verificarCampos2();
+					if (entradas2[0].equals("0")) {
+						clinica.verificarNumero(entradas[2]);
+						if (clinica.getFacturaDAO().getFacturaDetalleDAO().crearFacturaDetalle("" + entradas[6],
+								entradas[5], Integer.parseInt(entradas[2]))) {
+							vista.mostrarMensajeInformacion("Se ha registrado el servicio");
+							contador++;
+						} else {
+							vista.mostrarMensajeInformacion("No se ha podido generar la factura");
+						}
+					} else {
+						vista.mostrarMensajeAdvertencia(entradas2[1]);
+					}
+				}
+				if (contador == numeroServicios) {
+					vista.getPanelEmpleado().getPanelEmpleadoServicio().limpiarCampos();
+					vista.mostrarMensajeInformacion("Se ha generado correctamente la factura");
+					String path = "Reportes\\FacturaCliente.jrxml";
+					clinica.getUsuarioDAO().getConex().conectarDB();
+					JasperReport reporte = JasperCompileManager.compileReport(path);
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("facturaid", entradas[6]);
+					JasperPrint jPrint = JasperFillManager.fillReport(reporte, map,
+							clinica.getUsuarioDAO().getConex().getConnection());
+					JasperViewer viewer = new JasperViewer(jPrint, false);
+					viewer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					viewer.setTitle("Factura");
+					viewer.setVisible(true);
+
+					clinica.getUsuarioDAO().getConex().cerrarDB();
+					contador = 0;
+				}
 			} catch (JRException e1) {
 				e1.printStackTrace();
+			} catch (ExceptionNumero e1) {
+				vista.mostrarMensajeError(e1.getMessage());
 			}
-			clinica.getUsuarioDAO().getConex().cerrarDB();
+		}
 
+		if (comando.equals(vista.getPanelEmpleado().getPanelReporte().getCOMANDO_FACTURA())) {
+			reporteFacturas();
+		}
+
+		if (comando.equals((vista.getPanelEmpleado().getPanelReporte().getCOMANDO_MASCOTA()))) {
+			reportesMascotas();
+		}
+
+		if (comando.equals(vista.getPanelCliente().getPanelFiltroFactura().getCOMANDO_FILTRO())) {
+			filtrarFactura();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getPanelFiltroServicio().getCOMANDO_FILTRO())) {
+			filtrarServicio();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_AGREGARSERVICIO())) {
+			vista.getPanelAdministrador().getSplitPane()
+					.setRightComponent(vista.getPanelAdministrador().getPanelAdministradorServicio());
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_ELIMINARSERVICIO())) {
+			eliminarServicio();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getPanelEditarServicio().getCOMANDO_EDITAROPCION())) {
+			vista.getPanelAdministrador().getPanelEditarServicio().cambiarPanel();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getPanelEditarServicio().getCOMANDO_EDITARSERVICIO())) {
+			editarServicio();
+		}
+
+		if (comando.equals(vista.getPanelAdministrador().getCOMANDO_EDITARSERVICIO())) {
+			if (vista.getPanelAdministrador().getPanelTablaServicios().verificarDatosTablaFactura() == 1) {
+				String[] entradas = vista.getPanelAdministrador().getPanelTablaServicios().obtenerDatosServicio();
+				if (entradas[0].equals("0")) {
+					vista.getPanelAdministrador().getPanelEditarServicio().recibirDatos(entradas[1], entradas[2],
+							entradas[3]);
+					vista.getPanelAdministrador().getSplitPane()
+							.setRightComponent(vista.getPanelAdministrador().getPanelEditarServicio());
+				} else {
+					vista.mostrarMensajeInformacion(entradas[1]);
+				}
+			} else {
+				vista.mostrarMensajeInformacion("Seleccione un dato");
+			}
 		}
 
 	}
@@ -257,6 +399,7 @@ public class Controller implements ActionListener {
 		try {
 			String[] entradas = vista.getPanelCrearUsuario().verificarEntradas();
 			if (entradas[0].equals("0")) {
+				clinica.verificarCorreo(entradas[1]);
 				clinica.verificarNumero(entradas[9]);
 				clinica.verficarCedula(entradas[2]);
 				clinica.verficarTelefono(entradas[11]);
@@ -300,26 +443,18 @@ public class Controller implements ActionListener {
 			String[] entradas = vista.getPanelUsuario().getPanelCrearMascota().verificarEntradas();
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 			if (entradas[0].equals("0")) {
-				if (clinica.getUsuarioDAO().getMascotaDAO().verificarIdMascota(Integer.parseInt(entradas[1]))) {
-					vista.mostrarMensajeAdvertencia("El id " + entradas[1] + " ya se encuentra en uso");
+				Date date = formato.parse(entradas[5]);
+				Mascota mascota = new Mascota(usuario, entradas[1], entradas[2], entradas[3], entradas[4], date, "A");
+				if (clinica.getUsuarioDAO().getMascotaDAO().crearMascota(mascota)) {
+					vista.getPanelUsuario().getPanelCrearMascota().limpiarCampos();
+					vista.mostrarMensajeInformacion("Se ha reistrado tu mascota");
 				} else {
-					clinica.verificarNumero(entradas[1]);
-					Date date = formato.parse(entradas[6]);
-					Mascota mascota = new Mascota(Integer.parseInt(entradas[1]), usuario, entradas[2], entradas[3],
-							entradas[4], entradas[5], date, "A");
-					if (clinica.getUsuarioDAO().getMascotaDAO().crearMascota(mascota)) {
-						vista.getPanelUsuario().getPanelCrearMascota().limpiarCampos();
-						vista.mostrarMensajeInformacion("Se ha reistrado tu mascota");
-					} else {
-						vista.mostrarMensajeInformacion(
-								"Lo sentimos no se ha podido realizar el reistro de tu mascota");
-					}
+					vista.mostrarMensajeInformacion("Lo sentimos no se ha podido realizar el reistro de tu mascota");
 				}
+
 			} else {
 				vista.mostrarMensajeAdvertencia(entradas[1]);
 			}
-		} catch (ExceptionNumero e1) {
-			vista.mostrarMensajeError(e1.getMessage());
 		} catch (ParseException e1) {
 		}
 	}
@@ -349,7 +484,6 @@ public class Controller implements ActionListener {
 					vista.getPanelEmpleado().setVisible(false);
 				}
 				if (Integer.parseInt(resultado[1]) == 3) {
-					;
 					vista.getPanelAdministrador().setVisible(false);
 					vista.getPanelUsuario().setVisible(false);
 					vista.getPanelLogin().setVisible(false);
@@ -556,6 +690,7 @@ public class Controller implements ActionListener {
 		if (entradas[0][0].equals("0")) {
 			try {
 				clinica.verificarNumero(entradas[4][1]);
+				clinica.verificarNumero(entradas[3][1]);
 				int contador = 0;
 
 				for (int i = 1; i < entradas.length; i++) {
@@ -1142,21 +1277,295 @@ public class Controller implements ActionListener {
 
 	public void realizarFactura() {
 		String[] entradas = vista.getPanelEmpleado().getPanelEmpleadoServicio().verificarCampos();
-		if (entradas[0].equals("0")) {
-			Factura factura = new Factura(Integer.parseInt(entradas[6]), entradas[1], entradas[4], new Date(), "A");
-			if(clinica.getFacturaDAO().crearFactura(factura)) {
-				if(clinica.getFacturaDAO().getFacturaDetalleDAO().crearFacturaDetalle(""+factura.getIdFactura(), entradas[5], Integer.parseInt(entradas[2]))) {
-					vista.mostrarMensajeInformacion("Se ha generado correctamente la factura");
-				}else {
-					vista.mostrarMensajeInformacion("No se ha podido generar la factura");
+		try {
+			if (entradas[0].equals("0")) {
+				clinica.verficarCedula(entradas[1]);
+				clinica.verificarNumero(entradas[7]);
+				if (clinica.getUsuarioDAO().consultarCedulaUsuario(entradas[1])) {
+					Factura factura = new Factura(entradas[6], entradas[1], entradas[4], new Date(), "A");
+					if (clinica.getFacturaDAO().crearFactura(factura)) {
+						vista.getPanelEmpleado().getPanelEmpleadoServicio().activarPanelServicio();
+						vista.getPanelEmpleado().getPanelEmpleadoServicio().desabilitarCampos();
+					} else {
+						vista.mostrarMensajeInformacion("No se ha podido generar la factura");
+					}
+				} else {
+					vista.mostrarMensajeInformacion("La cédula no se encuentra registrada");
 				}
 
-			}else {
-				vista.mostrarMensajeInformacion("No se ha podido generar la factura");
+			} else {
+				vista.mostrarMensajeAdvertencia(entradas[1]);
 			}
-		} else {
-			vista.mostrarMensajeAdvertencia(entradas[1]);
+		} catch (ExceptionNumero e) {
+			vista.mostrarMensajeError(e.getMessage());
+		} catch (ExceptionCedula e) {
+			vista.mostrarMensajeError(e.getMessage());
 		}
 	}
 
+	public void registrarServicio() {
+		try {
+			String[] entradas = vista.getPanelAdministrador().getPanelAdministradorServicio().verificarCampos();
+			if (entradas[0].equals("0")) {
+				clinica.verificarNumero(entradas[3]);
+				Servicio servicio = new Servicio(entradas[1], entradas[2], Integer.parseInt(entradas[3]),
+						Integer.parseInt(entradas[3]), "A");
+				if (clinica.getServicioDAO().crearServicio(servicio)) {
+					vista.mostrarMensajeInformacion("Se ha registrado correctamente el servicio");
+				} else {
+					vista.mostrarMensajeInformacion("No se ha podido rergistrar el servicio");
+				}
+			} else {
+				vista.mostrarMensajeAdvertencia(entradas[1]);
+			}
+		} catch (ExceptionNumero e) {
+			vista.mostrarMensajeError(e.getMessage());
+		}
+	}
+
+	public void reporteFacturas() {
+		String path = "Reportes\\InformacionFacturas.jrxml";
+		clinica.getUsuarioDAO().getConex().conectarDB();
+		try {
+			JasperReport reporte = JasperCompileManager.compileReport(path);
+			JasperPrint jPrint = JasperFillManager.fillReport(reporte, null,
+					clinica.getUsuarioDAO().getConex().getConnection());
+			JasperViewer viewer = new JasperViewer(jPrint, false);
+			viewer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			viewer.setTitle("Facturas");
+			viewer.setVisible(true);
+		} catch (JRException e1) {
+			e1.printStackTrace();
+		}
+		clinica.getUsuarioDAO().getConex().cerrarDB();
+	}
+
+	public void reporteClientes() {
+		String path = "Reportes\\Clientes.jrxml";
+		clinica.getUsuarioDAO().getConex().conectarDB();
+		try {
+			JasperReport reporte = JasperCompileManager.compileReport(path);
+			JasperPrint jPrint = JasperFillManager.fillReport(reporte, null,
+					clinica.getUsuarioDAO().getConex().getConnection());
+			JasperViewer viewer = new JasperViewer(jPrint, false);
+			viewer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			viewer.setTitle("Lista de clientes");
+			viewer.setVisible(true);
+		} catch (JRException e1) {
+			e1.printStackTrace();
+		}
+		clinica.getUsuarioDAO().getConex().cerrarDB();
+	}
+
+	public void reportesMascotas() {
+		String path = "Reportes\\Mascotas.jrxml";
+		clinica.getUsuarioDAO().getConex().conectarDB();
+		try {
+			JasperReport reporte = JasperCompileManager.compileReport(path);
+			JasperPrint jPrint = JasperFillManager.fillReport(reporte, null,
+					clinica.getUsuarioDAO().getConex().getConnection());
+			JasperViewer viewer = new JasperViewer(jPrint, false);
+			viewer.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			viewer.setTitle("Lista de mascotas");
+			viewer.setVisible(true);
+		} catch (JRException e1) {
+			e1.printStackTrace();
+		}
+		clinica.getUsuarioDAO().getConex().cerrarDB();
+	}
+
+	public void filtrarFactura() {
+		String[][] entradas = vista.getPanelCliente().getPanelFiltroFactura().verificarCampos();
+		if (entradas[0][0].equals("0")) {
+			int contador = 0;
+
+			for (int i = 1; i < entradas.length; i++) {
+				if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
+					contador++;
+				}
+			}
+
+			if (contador == 1) {
+				int j = 0;
+				for (int i = 1; i < entradas.length; i++) {
+					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
+						j = i;
+						break;
+					}
+				}
+				ArrayList<Factura> listaFactura = clinica.getFacturaDAO().consultarFactura(entradas, j, this.usuario);
+				String[][] infoFactura = clinica.getFacturaDAO().mostarInfoFactura(listaFactura);
+				vista.getPanelCliente().getPanelTablaFactura().limpiarPanel();
+				vista.getPanelCliente().getPanelTablaFactura().mostrarTablaFactura(infoFactura);
+				vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getPanelTablaFactura(),
+						BorderLayout.CENTER);
+				vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getBtnVerFacturaDetalle(),
+						BorderLayout.PAGE_END);
+				vista.getPanelCliente().getSplitPane2().setBottomComponent(vista.getPanelCliente().getPanelFactura());
+				vista.getPanelCliente().getSplitPane2().setDividerLocation(150);
+				vista.getPanelCliente().getSplitPane().setRightComponent(vista.getPanelCliente().getSplitPane2());
+			}
+
+			if (contador == 2) {
+				int j = 0;
+				int k = 0;
+				for (int i = 1; i < entradas.length; i++) {
+					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
+						j = i;
+						break;
+					}
+				}
+
+				for (int i = j + 1; i < entradas.length; i++) {
+					if (!entradas[i][1].equals("") && !entradas[i][1].equals("Seleccione")) {
+						k = i;
+						break;
+					}
+				}
+				ArrayList<Factura> listaFactura = clinica.getFacturaDAO().consultarFactura(entradas, j, k,
+						this.usuario);
+				String[][] infoFactura = clinica.getFacturaDAO().mostarInfoFactura(listaFactura);
+				vista.getPanelCliente().getPanelTablaFactura().limpiarPanel();
+				vista.getPanelCliente().getPanelTablaFactura().mostrarTablaFactura(infoFactura);
+				vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getPanelTablaFactura(),
+						BorderLayout.CENTER);
+				vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getBtnVerFacturaDetalle(),
+						BorderLayout.PAGE_END);
+				vista.getPanelCliente().getSplitPane2().setBottomComponent(vista.getPanelCliente().getPanelFactura());
+				vista.getPanelCliente().getSplitPane2().setDividerLocation(150);
+				vista.getPanelCliente().getSplitPane().setRightComponent(vista.getPanelCliente().getSplitPane2());
+			}
+
+			if (contador == 3) {
+				ArrayList<Factura> listaFactura = clinica.getFacturaDAO().consultarFactura(entradas, this.usuario);
+				String[][] infoFactura = clinica.getFacturaDAO().mostarInfoFactura(listaFactura);
+				vista.getPanelCliente().getPanelTablaFactura().limpiarPanel();
+				vista.getPanelCliente().getPanelTablaFactura().mostrarTablaFactura(infoFactura);
+				vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getPanelTablaFactura(),
+						BorderLayout.CENTER);
+				vista.getPanelCliente().getPanelFactura().add(vista.getPanelCliente().getBtnVerFacturaDetalle(),
+						BorderLayout.PAGE_END);
+				vista.getPanelCliente().getSplitPane2().setBottomComponent(vista.getPanelCliente().getPanelFactura());
+				vista.getPanelCliente().getSplitPane2().setDividerLocation(150);
+				vista.getPanelCliente().getSplitPane().setRightComponent(vista.getPanelCliente().getSplitPane2());
+			}
+
+		} else {
+			vista.mostrarMensajeAdvertencia(entradas[0][1]);
+		}
+	}
+
+	public void filtrarServicio() {
+		String[][] entradas = vista.getPanelAdministrador().getPanelFiltroServicio().verificarCampos();
+		if (entradas[0][0].equals("0")) {
+			try {
+				if (!entradas[1][1].equals("")) {
+					clinica.verificarNumero(entradas[1][1]);
+				}
+				int contador = 0;
+
+				for (int i = 1; i < entradas.length; i++) {
+					if (!entradas[i][1].equals("")) {
+						contador++;
+					}
+				}
+
+				if (contador == 1) {
+					int j = 0;
+					for (int i = 1; i < entradas.length; i++) {
+						if (!entradas[i][1].equals("")) {
+							j = i;
+							break;
+						}
+					}
+					ArrayList<Servicio> listaServicio = clinica.getServicioDAO().consultarServicios(entradas, j);
+					String[][] infoServicios = clinica.getServicioDAO().mostarInfoServicio(listaServicio);
+					vista.getPanelAdministrador().getPanelTablaServicios().limpiarPanel();
+					vista.getPanelAdministrador().getPanelTablaServicios().mostrarTablaServicios(infoServicios);
+					vista.getPanelAdministrador().getSplitPane()
+							.setRightComponent(vista.getPanelAdministrador().getSplitPane2());
+				}
+
+				if (contador == 2) {
+					int j = 0;
+					for (int i = 1; i < entradas.length; i++) {
+						if (!entradas[i][1].equals("")) {
+							j = i;
+							break;
+						}
+					}
+					ArrayList<Servicio> listaServicio = clinica.getServicioDAO().consultarServicios(entradas);
+					String[][] infoServicios = clinica.getServicioDAO().mostarInfoServicio(listaServicio);
+					vista.getPanelAdministrador().getPanelTablaServicios().limpiarPanel();
+					vista.getPanelAdministrador().getPanelTablaServicios().mostrarTablaServicios(infoServicios);
+					vista.getPanelAdministrador().getSplitPane()
+							.setRightComponent(vista.getPanelAdministrador().getSplitPane2());
+				}
+			} catch (ExceptionNumero e) {
+				vista.mostrarMensajeError(e.getMessage());
+			}
+
+		} else {
+			vista.mostrarMensajeAdvertencia(entradas[0][1]);
+		}
+	}
+
+	public void eliminarServicio() {
+		if (vista.getPanelAdministrador().getPanelTablaServicios().verificarDatosTablaFactura() == 1) {
+			String[] entradas = vista.getPanelAdministrador().getPanelTablaServicios().obtenerDatosServicio();
+			if (entradas[0].equals("0")) {
+				int confirmar = vista.mostarMensajeConfirmar("Seguro desea eliminar este servicio");
+				if (confirmar == 0) {
+					if (clinica.getServicioDAO().eliminarServicio(entradas[1])) {
+						vista.mostrarMensajeInformacion("Se ha eliminado el servicio");
+						ArrayList<Servicio> listaServicio = clinica.getServicioDAO().consultarServicios();
+						String[][] infoServicios = clinica.getServicioDAO().mostarInfoServicio(listaServicio);
+						vista.getPanelAdministrador().getPanelTablaServicios().limpiarPanel();
+						vista.getPanelAdministrador().getPanelTablaServicios().mostrarTablaServicios(infoServicios);
+						vista.getPanelAdministrador().getSplitPane()
+								.setRightComponent(vista.getPanelAdministrador().getSplitPane2());
+					} else {
+						vista.mostrarMensajeInformacion("No se ha podido eliminar el servicio");
+					}
+				} else if (confirmar == 1) {
+					vista.mostrarMensajeInformacion("Gracias por confirmar");
+				} else {
+					vista.mostrarMensajeInformacion("Gracias");
+				}
+			} else {
+				vista.mostrarMensajeInformacion(entradas[1]);
+			}
+		} else {
+			vista.mostrarMensajeAdvertencia("Seleccione un dato");
+		}
+	}
+
+	public void editarServicio() {
+		try {
+			String[][] entradas = vista.getPanelAdministrador().getPanelEditarServicio().verificarCampos();
+			if (entradas[0][0].equals("0")) {
+				if (entradas[1][3].equals("Precio")) {
+					clinica.verificarNumero(entradas[1][1]);
+					if (clinica.getServicioDAO().editarServicio(entradas)) {
+						vista.mostrarMensajeInformacion("Se ha editado el servicio");
+						vista.getPanelAdministrador().getPanelEditarServicio().limpiarCampos();
+					} else {
+						vista.mostrarMensajeInformacion("No se ha podifo editar el servicio");
+					}
+				} else {
+					if (clinica.getServicioDAO().editarServicio(entradas)) {
+						vista.mostrarMensajeInformacion("Se ha editado el servicio");
+						vista.getPanelAdministrador().getPanelEditarServicio().limpiarCampos();
+					} else {
+						vista.mostrarMensajeInformacion("No se ha podifo editar el servicio");
+					}
+				}
+			} else {
+				vista.mostrarMensajeAdvertencia(entradas[0][1]);
+			}
+		} catch (ExceptionNumero e) {
+			vista.mostrarMensajeError(e.getMessage());
+		}
+
+	}
 }

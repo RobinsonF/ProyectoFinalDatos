@@ -3,14 +3,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import co.edu.unbosque.model.persistence.ConexionProperties;
+
 public class Conexion {
-	String login = "postgres";
-	String password = "camino32";
-	String url = "jdbc:postgresql://localhost:5432/ubosquedb";
+	
+	ConexionProperties conexionProperties;
+	String login = "";
+	String password = "";
+	String url = "";
 	private Connection connection;
 
 	public Conexion() {
-
+		conexionProperties = new ConexionProperties();
+		String[] datos = conexionProperties.leerInfoBD();
+		login = datos[0];
+		password = datos[1];
+		url = datos[2];
 	}
 
 	public void conectarDB() {

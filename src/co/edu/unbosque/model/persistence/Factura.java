@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Factura {
 
-	private int idFactura;
+	private String idFactura;
 	private String idUsuario = "";
 	private String idFormaPago = "";
 	private String formaPago = "";
@@ -15,19 +15,25 @@ public class Factura {
 		
 	}
 	
-	public Factura(int idFactura, String idUsuario, String formaPago, Date fechaGeneracion, String estado) {
+	public Factura(String idFactura, String idUsuario, String formaPago, Date fechaGeneracion, String estado) {
 		this.idFactura = idFactura;
 		this.idUsuario = idUsuario;
 		this.formaPago = formaPago;
 		this.fechaGeneracion = fechaGeneracion;
 		this.estado = estado;
 	}
+	
+	public Factura(String idFactura, String formaPago, Date fechaGeneracion) {
+		this.idFactura = idFactura;
+		this.formaPago = formaPago;
+		this.fechaGeneracion = fechaGeneracion;
+	}
 
-	public int getIdFactura() {
+	public String getIdFactura() {
 		return idFactura;
 	}
 
-	public void setIdFactura(int idFactura) {
+	public void setIdFactura(String idFactura) {
 		this.idFactura = idFactura;
 	}
 

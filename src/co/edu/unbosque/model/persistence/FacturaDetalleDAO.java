@@ -23,10 +23,6 @@ public class FacturaDetalleDAO {
 		int total = (int) ((subtotal * 0.19) + subtotal);
 		try {
 			conex.conectarDB();
-			System.out.println(
-					"INSERT INTO facturadetalle (idservicio, idfactura, cantidad, valorunitario, subtotal, iva_19, total, estado) VALUES ("
-							+ idServicio + ", " + idFactua + "," + cantidad + "," + precioUnitario + "," + subtotal
-							+ ", 19," + total + ", 'A')");
 			Statement smt = conex.getConnection().createStatement();
 			smt.executeUpdate(
 					"insert into facturadetalle (idservicio, idfactura, cantidad, valorunitario, subtotal, iva_19, total, estado) values ("

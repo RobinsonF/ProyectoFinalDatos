@@ -1,5 +1,6 @@
 package co.edu.unbosque.view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -15,6 +16,7 @@ public class PanelInicioCliente extends JPanel {
 
 	public PanelInicioCliente() {
 		setLayout(null);
+		setBackground(new Color(117, 121, 121));
 		imagen2 = new ImageIcon(getClass().getResource("/imagenes/mascota.jpeg"));
 		labelImagen = new JLabel();
 		labelImagen.setIcon(imagen2);

@@ -32,6 +32,19 @@ public class Mascota {
 	
 	
 	
+	
+	
+	public Mascota(String idDueño, String nombre, String idEspecie, String idRaza, String idColor, Date añoNacimiento,
+			String estado) {
+		this.idDueño = idDueño;
+		this.nombre = nombre;
+		this.idEspecie = idEspecie;
+		this.idRaza = idRaza;
+		this.idColor = idColor;
+		this.añoNacimiento = añoNacimiento;
+		this.estado = estado;
+	}
+
 	public Mascota(String nombre, String idEspecie, String idRaza, String idColor, Date añoNacimiento) {
 		this.nombre = nombre;
 		this.idEspecie = idEspecie;

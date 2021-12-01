@@ -33,5 +33,14 @@
 	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/stax-1.2.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/stax-api-1.0.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/stax-api-1.0-2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/flatlaf-0.44.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-5.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-examples-5.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-excelant-5.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-javadoc-5.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-ooxml-5.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-ooxml-full-5.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-ooxml-lite-5.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ROBINSON/eclipse-workspace/ProyectoFinal/library/poi-scratchpad-5.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

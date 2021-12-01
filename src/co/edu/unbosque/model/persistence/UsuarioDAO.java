@@ -34,7 +34,6 @@ public class UsuarioDAO {
 		}
 		return verificar;
 	}
-	
 
 	public ArrayList<Usuario> consultarUsuarios() {
 		conex.conectarDB();
@@ -312,6 +311,32 @@ public class UsuarioDAO {
 			e.printStackTrace();
 		}
 
+		return verificar;
+	}
+
+	public boolean consultarCedulaUsuario(String cedula) {
+		conex.conectarDB();
+		boolean verificar = false;
+		String cedulaUsuario = "";
+
+		try {
+			conex.conectarDB();
+			PreparedStatement consulta = conex.getConnection()
+					.prepareStatement("SELECT cedula FROM usuario WHERE cedula = '" + cedula + "'");
+			ResultSet res = consulta.executeQuery();
+			if (res.next()) {
+				cedulaUsuario = res.getString("cedula");
+			}
+			if (cedulaUsuario.equals(cedula)) {
+				verificar = true;
+			}
+			res.close();
+			consulta.execute();
+			consulta.close();
+			conex.cerrarDB();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return verificar;
 	}
 

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Mascotas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5089ded6-1689-409c-8e01-49a2f51392e5">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Proyecto"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT mascota.idmascota,
+	mascota.nombre,
+	usuario.nombres,
+	raza.nombre,
+	color.nombre,
+	especie.nombre,
+	mascota.añonacimiento
+FROM mascota
+	INNER JOIN raza ON 
+	 mascota.idraza = raza.idraza 
+	INNER JOIN usuario ON 
+	 mascota.idusuario = usuario.correo 
+	INNER JOIN color ON 
+	 mascota.idcolor = color.idcolor 
+	INNER JOIN especie ON 
+	 mascota.idespecie = especie.idespecie
+	 ORDER BY mascota.idmascota
+	]]>
+	</queryString>
+	<field name="idmascota" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="idmascota"/>
+		<property name="com.jaspersoft.studio.field.label" value="idmascota"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="mascota"/>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="mascota"/>
+	</field>
+	<field name="nombres" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombres"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombres"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+	</field>
+	<field name="COLUMN_4" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="raza"/>
+	</field>
+	<field name="COLUMN_5" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="color"/>
+	</field>
+	<field name="COLUMN_6" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="especie"/>
+	</field>
+	<field name="añonacimiento" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="añonacimiento"/>
+		<property name="com.jaspersoft.studio.field.label" value="añonacimiento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="mascota"/>
+	</field>
+	<group name="idmascota">
+		<groupExpression><![CDATA[$F{idmascota}]]></groupExpression>
+	</group>
+	<group name="nombre">
+		<groupExpression><![CDATA[$F{nombre}]]></groupExpression>
+	</group>
+	<group name="nombres">
+		<groupExpression><![CDATA[$F{nombres}]]></groupExpression>
+	</group>
+	<group name="COLUMN_4">
+		<groupExpression><![CDATA[$F{COLUMN_4}]]></groupExpression>
+	</group>
+	<group name="COLUMN_5">
+		<groupExpression><![CDATA[$F{COLUMN_5}]]></groupExpression>
+	</group>
+	<group name="COLUMN_6">
+		<groupExpression><![CDATA[$F{COLUMN_6}]]></groupExpression>
+	</group>
+	<group name="añonacimiento">
+		<groupExpression><![CDATA[$F{añonacimiento}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="81" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="550" height="50" uuid="2ace4275-5958-449a-b60e-f0e3790c30b1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lista de mascotas]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="50" width="50" height="31" uuid="ea800043-b914-402e-9c27-951b0a46518a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="50" y="50" width="81" height="31" uuid="f8e58700-19e5-4879-a79e-5f6bbde5715c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="131" y="50" width="81" height="31" uuid="1254fde1-f645-40c5-9d77-b95bde4b8bde"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="210" y="50" width="81" height="31" uuid="d121bbfb-9055-4d76-83bc-435b5c69de71"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="290" y="50" width="81" height="31" uuid="a5c7df76-f517-488c-9c44-05c8b35c8f1b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="371" y="50" width="81" height="31" uuid="c3fad86c-dd49-4bd4-8445-c663f6d39560"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="452" y="50" width="81" height="31" uuid="7c5465b1-5640-4faf-84c0-15432d1eb06b"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="50" width="50" height="30" uuid="7ee594c6-aef0-4351-9866-75497193a6fe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ID Mascota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="50" width="81" height="30" uuid="3e33f1ac-9815-4ce1-b31b-18a06b9c3dc7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre mascota]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="131" y="50" width="79" height="30" uuid="f77621bf-2f38-4a71-b147-5f600882f9e0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dueño]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="50" width="80" height="30" uuid="a3ca7595-4447-455a-8140-1ae8e077e783"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha nacimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="50" width="81" height="30" uuid="59fedfef-4da8-4cb7-98f4-bbfb2fd5256d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Color]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="371" y="50" width="81" height="30" uuid="ab9b011c-6a90-4e7a-a121-fb3970c54338"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Raza]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="51" width="80" height="30" uuid="c46e05f5-6603-45d7-b345-ae736a5affe4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Especie]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="50" height="31" uuid="8cddabb2-370d-4f05-8d01-c3f3cc4ccbfa"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="50" y="0" width="81" height="31" uuid="5a7e7861-2160-4b08-b6d7-0a27ca769d84"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="131" y="0" width="79" height="31" uuid="be9fc36a-9e46-48af-951e-ac268ddcecbe"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="210" y="0" width="80" height="31" uuid="1906d9f3-8af1-4e8b-97b9-57615505ba50"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="290" y="0" width="81" height="31" uuid="ba396294-26f1-4857-b8fb-227141a8860e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="371" y="0" width="81" height="31" uuid="88951615-0e7a-4318-82e3-f1811e19cdf5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="452" y="0" width="81" height="31" uuid="65827cfb-22aa-4980-98aa-e2948e3c1548"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="50" height="30" uuid="9161ff5d-93da-46d0-a231-3092f26ecfc3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idmascota}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="0" width="79" height="30" uuid="9b6a4745-4ab9-4ea4-abec-d027ec1e3ada"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="0" width="79" height="30" uuid="3bc150b2-58db-4f5c-9afe-e0bec8e1c536"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nombres}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMM d, yyyy">
+				<reportElement x="211" y="1" width="79" height="30" uuid="7a909d26-d86e-4085-a371-14e96cd9c59b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{añonacimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="1" width="80" height="30" uuid="32096489-510b-4b30-b6cd-9a9147c4cb0b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COLUMN_5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="0" width="80" height="30" uuid="8fd78b33-05a1-42cd-865b-967a85693a1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COLUMN_4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="1" width="80" height="30" uuid="4ca5383c-079b-4904-982b-eaeb89146013"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COLUMN_6}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="72" splitType="Stretch">
+			<textField pattern="MMM d, yyyy h:mm:ss a">
+				<reportElement x="0" y="50" width="150" height="18" uuid="ecc6f448-4f89-4fe6-9133-23cb597b67de"/>
+				<textElement textAlignment="Justified" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="371" y="38" width="179" height="30" uuid="28dab52e-56a7-4890-ab87-dc0b2411cea7"/>
+				<textElement textAlignment="Right" verticalAlignment="Bottom"/>
+				<textFieldExpression><![CDATA[" Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
